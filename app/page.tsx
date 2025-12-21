@@ -1,65 +1,216 @@
-import Image from "next/image";
+import Link from "next/link";
+import prisma from "@/lib/prisma";
+import { NovelGrid } from "@/components/novels/novel-grid";
+import { Button } from "@/components/ui/button";
+import { ArrowRight, BookOpen, PenTool, Users, TrendingUp } from "lucide-react";
 
-export default function Home() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+async function getLatestNovels() {
+	return await prisma.novel.findMany({
+		where: { isVisible: true },
+		include: {
+			author: { select: { name: true } },
+			tags: { include: { tag: { select: { name: true, slug: true } } } },
+			_count: { select: { chapters: true } },
+		},
+		orderBy: { updatedAt: "desc" },
+		take: 10,
+	});
+}
+
+async function getPopularNovels() {
+	return prisma.novel.findMany({
+		where: { isVisible: true },
+		include: {
+			author: { select: { name: true } },
+			tags: { include: { tag: { select: { name: true, slug: true } } } },
+			_count: { select: { chapters: true } },
+		},
+		orderBy: { views: "desc" },
+		take: 5,
+	});
+}
+
+async function getStats() {
+	const [novelCount, chapterCount, authorCount] = await Promise.all([
+		prisma.novel.count({ where: { isVisible: true } }),
+		prisma.chapter.count({ where: { isPublished: true } }),
+		prisma.user.count({ where: { role: "AUTHOR" } }),
+	]);
+
+	return { novelCount, chapterCount, authorCount };
+}
+
+export default async function HomePage() {
+	const [latestNovels, popularNovels, stats] = await Promise.all([
+		getLatestNovels(),
+		getPopularNovels(),
+		getStats(),
+	]);
+
+	return (
+		<div className="flex flex-col">
+			{/* Hero Section */}
+			<section className="py-20 px-4 bg-linear-to-b from-primary/5 to-background">
+				<div className="container text-center">
+					<h1 className="text-4xl md:text-6xl font-bold mb-6">
+						Discover Your Next
+						<span className="text-primary"> Adventure</span>
+					</h1>
+					<p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+						Explore thousands of web novels, from fantasy epics to slice-of-life
+						stories. Read, write, and connect with a community of storytellers.
+					</p>
+					<div className="flex flex-wrap justify-center gap-4">
+						<Button size="lg" asChild>
+							<Link href="/novels">
+								<BookOpen className="mr-2 h-5 w-5" />
+								Start Reading
+							</Link>
+						</Button>
+						<Button size="lg" variant="outline" asChild>
+							<Link href="/register">
+								<PenTool className="mr-2 h-5 w-5" />
+								Become an Author
+							</Link>
+						</Button>
+					</div>
+				</div>
+			</section>
+
+			{/* Stats Section */}
+			<section className="py-12 border-y bg-muted/30">
+				<div className="container">
+					<div className="grid grid-cols-3 gap-8 text-center">
+						<div>
+							<p className="text-3xl md:text-4xl font-bold text-primary">
+								{stats.novelCount.toLocaleString()}
+							</p>
+							<p className="text-sm md:text-base text-muted-foreground mt-1">
+								Novels
+							</p>
+						</div>
+						<div>
+							<p className="text-3xl md:text-4xl font-bold text-primary">
+								{stats.chapterCount.toLocaleString()}
+							</p>
+							<p className="text-sm md:text-base text-muted-foreground mt-1">
+								Chapters
+							</p>
+						</div>
+						<div>
+							<p className="text-3xl md:text-4xl font-bold text-primary">
+								{stats.authorCount.toLocaleString()}
+							</p>
+							<p className="text-sm md:text-base text-muted-foreground mt-1">
+								Authors
+							</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			{/* Popular Novels Section */}
+			<section className="py-16 px-4">
+				<div className="container">
+					<div className="flex items-center justify-between mb-8">
+						<div className="flex items-center gap-3">
+							<TrendingUp className="h-6 w-6 text-primary" />
+							<h2 className="text-2xl md:text-3xl font-bold">Popular Novels</h2>
+						</div>
+						<Button variant="ghost" asChild>
+							<Link href="/novels?sort=popular">
+								View All
+								<ArrowRight className="ml-2 h-4 w-4" />
+							</Link>
+						</Button>
+					</div>
+					<NovelGrid novels={popularNovels} />
+				</div>
+			</section>
+
+			{/* Latest Updates Section */}
+			<section className="py-16 px-4 bg-muted/30">
+				<div className="container">
+					<div className="flex items-center justify-between mb-8">
+						<div className="flex items-center gap-3">
+							<BookOpen className="h-6 w-6 text-primary" />
+							<h2 className="text-2xl md:text-3xl font-bold">Latest Updates</h2>
+						</div>
+						<Button variant="ghost" asChild>
+							<Link href="/novels">
+								View All
+								<ArrowRight className="ml-2 h-4 w-4" />
+							</Link>
+						</Button>
+					</div>
+					<NovelGrid novels={latestNovels} />
+				</div>
+			</section>
+
+			{/* CTA Section */}
+			<section className="py-20 px-4">
+				<div className="container">
+					<div className="bg-primary/5 rounded-2xl p-8 md:p-12 text-center">
+						<Users className="h-12 w-12 text-primary mx-auto mb-6" />
+						<h2 className="text-2xl md:text-3xl font-bold mb-4">
+							Join Our Community
+						</h2>
+						<p className="text-muted-foreground mb-8 max-w-xl mx-auto">
+							Create an account to save your reading progress, build your
+							library, leave reviews, and even publish your own stories.
+						</p>
+						<div className="flex flex-wrap justify-center gap-4">
+							<Button size="lg" asChild>
+								<Link href="/register">Create Free Account</Link>
+							</Button>
+							<Button size="lg" variant="outline" asChild>
+								<Link href="/login">Sign In</Link>
+							</Button>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			{/* Footer */}
+			<footer className="py-8 px-4 border-t">
+				<div className="container">
+					<div className="flex flex-col md:flex-row items-center justify-between gap-4">
+						<div className="flex items-center gap-2 font-bold text-xl">
+							<BookOpen className="h-6 w-6" />
+							<span>WebNovel</span>
+						</div>
+						<nav className="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
+							<Link
+								href="/novels"
+								className="hover:text-foreground transition-colors"
+							>
+								Browse
+							</Link>
+							<Link
+								href="/search"
+								className="hover:text-foreground transition-colors"
+							>
+								Search
+							</Link>
+							<Link
+								href="/about"
+								className="hover:text-foreground transition-colors"
+							>
+								About
+							</Link>
+							<Link
+								href="/contact"
+								className="hover:text-foreground transition-colors"
+							>
+								Contact
+							</Link>
+						</nav>
+						<p className="text-sm text-muted-foreground">
+							© {new Date().getFullYear()} WebNovel. All rights reserved.
+						</p>
+					</div>
+				</div>
+			</footer>
+		</div>
+	);
 }

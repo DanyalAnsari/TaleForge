@@ -3,12 +3,13 @@ import { getServerSession } from "@/lib/auth-server";
 import { UserMenu } from "@/components/user-menu";
 import { Button } from "@/components/ui/button";
 import { BookOpen } from "lucide-react";
+import { User } from "@/prisma/generated/prisma/client";
 
 export async function Navbar() {
 	const session = await getServerSession();
 
 	return (
-		<header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
+		<header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 flex items-center justify-center">
 			<div className="container flex h-16 items-center justify-between">
 				<div className="flex items-center gap-6">
 					<Link href="/" className="flex items-center gap-2 font-bold text-xl">
@@ -34,7 +35,7 @@ export async function Navbar() {
 
 				<div className="flex items-center gap-4">
 					{session ? (
-						<UserMenu user={session.user} />
+						<UserMenu user={session.user as User} />
 					) : (
 						<div className="flex items-center gap-2">
 							<Button variant="ghost" asChild>
