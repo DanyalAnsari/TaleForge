@@ -391,7 +391,8 @@ export const ModelName = {
   Novel: 'Novel',
   Chapter: 'Chapter',
   Tag: 'Tag',
-  NovelTag: 'NovelTag'
+  NovelTag: 'NovelTag',
+  LibraryEntry: 'LibraryEntry'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -407,7 +408,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "novel" | "chapter" | "tag" | "novelTag"
+    modelProps: "user" | "session" | "account" | "verification" | "novel" | "chapter" | "tag" | "novelTag" | "libraryEntry"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1003,6 +1004,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    LibraryEntry: {
+      payload: Prisma.$LibraryEntryPayload<ExtArgs>
+      fields: Prisma.LibraryEntryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.LibraryEntryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LibraryEntryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.LibraryEntryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LibraryEntryPayload>
+        }
+        findFirst: {
+          args: Prisma.LibraryEntryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LibraryEntryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.LibraryEntryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LibraryEntryPayload>
+        }
+        findMany: {
+          args: Prisma.LibraryEntryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LibraryEntryPayload>[]
+        }
+        create: {
+          args: Prisma.LibraryEntryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LibraryEntryPayload>
+        }
+        createMany: {
+          args: Prisma.LibraryEntryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.LibraryEntryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LibraryEntryPayload>[]
+        }
+        delete: {
+          args: Prisma.LibraryEntryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LibraryEntryPayload>
+        }
+        update: {
+          args: Prisma.LibraryEntryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LibraryEntryPayload>
+        }
+        deleteMany: {
+          args: Prisma.LibraryEntryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.LibraryEntryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.LibraryEntryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LibraryEntryPayload>[]
+        }
+        upsert: {
+          args: Prisma.LibraryEntryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LibraryEntryPayload>
+        }
+        aggregate: {
+          args: Prisma.LibraryEntryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateLibraryEntry>
+        }
+        groupBy: {
+          args: Prisma.LibraryEntryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LibraryEntryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.LibraryEntryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LibraryEntryCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1149,6 +1224,18 @@ export const NovelTagScalarFieldEnum = {
 } as const
 
 export type NovelTagScalarFieldEnum = (typeof NovelTagScalarFieldEnum)[keyof typeof NovelTagScalarFieldEnum]
+
+
+export const LibraryEntryScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  novelId: 'novelId',
+  lastReadChapterId: 'lastReadChapterId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LibraryEntryScalarFieldEnum = (typeof LibraryEntryScalarFieldEnum)[keyof typeof LibraryEntryScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1374,6 +1461,7 @@ export type GlobalOmitConfig = {
   chapter?: Prisma.ChapterOmit
   tag?: Prisma.TagOmit
   novelTag?: Prisma.NovelTagOmit
+  libraryEntry?: Prisma.LibraryEntryOmit
 }
 
 /* Types for Logging */

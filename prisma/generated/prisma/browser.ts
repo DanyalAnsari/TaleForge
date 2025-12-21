@@ -57,3 +57,8 @@ export type Tag = Prisma.TagModel
  * 
  */
 export type NovelTag = Prisma.NovelTagModel
+/**
+ * Model LibraryEntry
+ * 
+ */
+export type LibraryEntry = Prisma.LibraryEntryModel

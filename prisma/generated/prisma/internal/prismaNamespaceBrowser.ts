@@ -58,7 +58,8 @@ export const ModelName = {
   Novel: 'Novel',
   Chapter: 'Chapter',
   Tag: 'Tag',
-  NovelTag: 'NovelTag'
+  NovelTag: 'NovelTag',
+  LibraryEntry: 'LibraryEntry'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -184,6 +185,18 @@ export const NovelTagScalarFieldEnum = {
 } as const
 
 export type NovelTagScalarFieldEnum = (typeof NovelTagScalarFieldEnum)[keyof typeof NovelTagScalarFieldEnum]
+
+
+export const LibraryEntryScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  novelId: 'novelId',
+  lastReadChapterId: 'lastReadChapterId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LibraryEntryScalarFieldEnum = (typeof LibraryEntryScalarFieldEnum)[keyof typeof LibraryEntryScalarFieldEnum]
 
 
 export const SortOrder = {
