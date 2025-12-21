@@ -2,11 +2,13 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import prisma from "@/lib/prisma";
+import { getServerSession } from "@/lib/auth-server";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ChapterList } from "@/components/novels/chapter-list";
+import { AddToLibraryButton } from "@/components/novels/add-to-library-button";
 import { formatNumber, formatDate } from "@/lib/utils";
 import { BookOpen, Eye, Calendar, User, Clock, PlayCircle } from "lucide-react";
 
@@ -47,6 +49,21 @@ async function getNovel(slug: string) {
 	return novel;
 }
 
+async function getLibraryStatus(novelId: string, userId?: string) {
+	if (!userId) return false;
+
+	const entry = await prisma.libraryEntry.findUnique({
+		where: {
+			userId_novelId: {
+				userId,
+				novelId,
+			},
+		},
+	});
+
+	return !!entry;
+}
+
 export async function generateMetadata({ params }: NovelPageProps) {
 	const { slug } = await params;
 	const novel = await getNovel(slug);
@@ -63,12 +80,16 @@ export async function generateMetadata({ params }: NovelPageProps) {
 
 export default async function NovelPage({ params }: NovelPageProps) {
 	const { slug } = await params;
-	const novel = await getNovel(slug);
+	const [novel, session] = await Promise.all([
+		getNovel(slug),
+		getServerSession(),
+	]);
 
 	if (!novel) {
 		notFound();
 	}
 
+	const isInLibrary = await getLibraryStatus(novel.id, session?.user?.id);
 	const firstChapter = novel.chapters[0];
 	const statusColors = {
 		ONGOING: "bg-green-500/10 text-green-500 border-green-500/20",
@@ -80,7 +101,7 @@ export default async function NovelPage({ params }: NovelPageProps) {
 		<div className="container py-8">
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 				{/* Left column - Cover and info */}
-				<div className="lg:col-span-1 space-y-6">
+				<div className="lg:col-span-1 space-y-4">
 					<div className="relative aspect-2/3 rounded-lg overflow-hidden shadow-lg">
 						{novel.coverImageUrl ? (
 							<Image
@@ -106,6 +127,12 @@ export default async function NovelPage({ params }: NovelPageProps) {
 							</Link>
 						</Button>
 					)}
+
+					<AddToLibraryButton
+						novelId={novel.id}
+						isInLibrary={isInLibrary}
+						isLoggedIn={!!session}
+					/>
 
 					<Card>
 						<CardContent className="pt-6 space-y-4">
