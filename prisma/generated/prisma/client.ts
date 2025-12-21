@@ -59,3 +59,23 @@ export type Account = Prisma.AccountModel
  * 
  */
 export type Verification = Prisma.VerificationModel
+/**
+ * Model Novel
+ * 
+ */
+export type Novel = Prisma.NovelModel
+/**
+ * Model Chapter
+ * 
+ */
+export type Chapter = Prisma.ChapterModel
+/**
+ * Model Tag
+ * 
+ */
+export type Tag = Prisma.TagModel
+/**
+ * Model NovelTag
+ * 
+ */
+export type NovelTag = Prisma.NovelTagModel

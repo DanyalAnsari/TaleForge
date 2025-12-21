@@ -20,7 +20,7 @@ enum NovelStatus {
 }
 
 model User {
-  id            String   @id
+  id            String   @id @default(cuid())
   name          String
   email         String
   emailVerified Boolean  @default(false)
@@ -47,7 +47,8 @@ model Session {
   ipAddress String?
   userAgent String?
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([token])
   @@index([userId])
@@ -84,4 +85,61 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+model Novel {
+  id            String      @id @default(cuid())
+  title         String
+  slug          String      @unique
+  description   String      @db.Text
+  coverImageUrl String?
+  status        NovelStatus @default(ONGOING)
+  isVisible     Boolean     @default(true)
+  views         Int         @default(0)
+  authorId      String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  author   User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  chapters Chapter[]
+  tags     NovelTag[]
+
+  @@map("novel")
+}
+
+model Chapter {
+  id            String   @id @default(cuid())
+  title         String
+  content       String   @db.Text
+  chapterNumber Int
+  isPublished   Boolean  @default(false)
+  views         Int      @default(0)
+  novelId       String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  novel Novel @relation(fields: [novelId], references: [id], onDelete: Cascade)
+
+  @@unique([novelId, chapterNumber])
+  @@map("chapter")
+}
+
+model Tag {
+  id     String     @id @default(cuid())
+  name   String
+  slug   String     @unique
+  novels NovelTag[]
+
+  @@map("tag")
+}
+
+model NovelTag {
+  novelId String
+  tagId   String
+
+  novel Novel @relation(fields: [novelId], references: [id], onDelete: Cascade)
+  tag   Tag   @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([novelId, tagId])
+  @@map("novel_tag")
 }
