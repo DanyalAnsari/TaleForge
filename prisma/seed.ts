@@ -2,7 +2,7 @@ import { NovelStatus, Role } from "@/prisma/generated/prisma/enums";
 import { PrismaClient } from "@/prisma/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import "dotenv/config";
-import { User } from "./generated/prisma/browser";
+import bcrypt from "bcryptjs";
 
 const adapter = new PrismaPg({
 	connectionString: process.env.DATABASE_URL,
@@ -56,20 +56,104 @@ async function main() {
 
 	console.log(`✅ Created ${tags.length} tags`);
 
-	// Create an author user
+	// ============================================
+	// Create Admin User
+	// ============================================
+	const admin = await prisma.user.upsert({
+		where: { email: "admin@webnovel.com" },
+		update: {},
+		create: {
+			name: "Admin User",
+			email: "admin@webnovel.com",
+			emailVerified: true,
+			role: Role.ADMIN,
+			isActive: true,
+		},
+	});
+
+	// Create admin account (for Better Auth password login)
+	await prisma.account.upsert({
+		where: {
+			id: `account-${admin.id}`,
+		},
+		update: {},
+		create: {
+			id: `account-${admin.id}`,
+			userId: admin.id,
+			accountId: admin.id,
+			providerId: "credential",
+			// Password: "admin123" - hashed with bcrypt
+			password: await bcrypt.hash("admin123", 10),
+		},
+	});
+
+	console.log(`✅ Created admin: ${admin.email} (password: admin123)`);
+
+	// ============================================
+	// Create Author User
+	// ============================================
 	const author = await prisma.user.upsert({
-		where: { email: "author@example.com" },
+		where: { email: "author@webnovel.com" },
 		update: {},
 		create: {
 			name: "Demo Author",
-			email: "author@example.com",
+			email: "author@webnovel.com",
 			emailVerified: true,
 			role: Role.AUTHOR,
 			isActive: true,
 		},
 	});
 
-	console.log(`✅ Created author: ${author.name}`);
+	// Create author account
+	await prisma.account.upsert({
+		where: {
+			id: `account-${author.id}`,
+		},
+		update: {},
+		create: {
+			id: `account-${author.id}`,
+			userId: author.id,
+			accountId: author.id,
+			providerId: "credential",
+			// Password: "author123"
+			password: await bcrypt.hash("author123", 10),
+		},
+	});
+
+	console.log(`✅ Created author: ${author.email} (password: author123)`);
+
+	// ============================================
+	// Create Reader User
+	// ============================================
+	const reader = await prisma.user.upsert({
+		where: { email: "reader@webnovel.com" },
+		update: {},
+		create: {
+			name: "Demo Reader",
+			email: "reader@webnovel.com",
+			emailVerified: true,
+			role: Role.READER,
+			isActive: true,
+		},
+	});
+
+	// Create reader account
+	await prisma.account.upsert({
+		where: {
+			id: `account-${reader.id}`,
+		},
+		update: {},
+		create: {
+			id: `account-${reader.id}`,
+			userId: reader.id,
+			accountId: reader.id,
+			providerId: "credential",
+			// Password: "reader123"
+			password: await bcrypt.hash("reader123", 10),
+		},
+	});
+
+	console.log(`✅ Created reader: ${reader.email} (password: reader123)`);
 
 	// Sample novels data
 	const novelsData = [
@@ -479,7 +563,63 @@ By dawn, his first meridian had untwisted itself. The journey of ten thousand mi
 		);
 	}
 
-	console.log("🎉 Seeding complete!");
+	// ============================================
+	// Add some sample library entries for reader
+	// ============================================
+	const firstNovel = await prisma.novel.findFirst({
+		include: { chapters: { take: 1 } },
+	});
+
+	if (firstNovel) {
+		await prisma.libraryEntry.upsert({
+			where: {
+				userId_novelId: {
+					userId: reader.id,
+					novelId: firstNovel.id,
+				},
+			},
+			update: {},
+			create: {
+				userId: reader.id,
+				novelId: firstNovel.id,
+				lastReadChapterId: firstNovel.chapters[0]?.id,
+			},
+		});
+		console.log(`✅ Added "${firstNovel.title}" to reader's library`);
+	}
+
+	// ============================================
+	// Add sample reviews
+	// ============================================
+	const novels = await prisma.novel.findMany({ take: 3 });
+
+	for (const novel of novels) {
+		await prisma.novelReview.upsert({
+			where: {
+				novelId_userId: {
+					novelId: novel.id,
+					userId: reader.id,
+				},
+			},
+			update: {},
+			create: {
+				novelId: novel.id,
+				userId: reader.id,
+				rating: Math.floor(Math.random() * 2) + 4, // 4-5 stars
+				title: "Great read!",
+				body: "Really enjoyed this novel. The characters are well-developed and the plot keeps you engaged throughout. Highly recommended!",
+			},
+		});
+	}
+	console.log(`✅ Added sample reviews`);
+
+	console.log("\n🎉 Seeding complete!");
+	console.log("\n📝 Test Accounts:");
+	console.log("─────────────────────────────────────");
+	console.log("Admin:  admin@webnovel.com  / admin123");
+	console.log("Author: author@webnovel.com / author123");
+	console.log("Reader: reader@webnovel.com / reader123");
+	console.log("─────────────────────────────────────\n");
 }
 
 main()
