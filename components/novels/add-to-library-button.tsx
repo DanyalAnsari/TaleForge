@@ -1,5 +1,3 @@
-// components/novels/add-to-library-button.tsx
-
 "use client";
 
 import { useState, useTransition } from "react";
@@ -7,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { addToLibrary, removeFromLibrary } from "@/lib/actions/library";
 import { Library, Check, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 interface AddToLibraryButtonProps {
 	novelId: string;
@@ -22,15 +21,13 @@ export function AddToLibraryButton({
 	const router = useRouter();
 	const [isPending, startTransition] = useTransition();
 	const [inLibrary, setInLibrary] = useState(isInLibrary);
-	const [error, setError] = useState<string | null>(null);
 
 	async function handleClick() {
 		if (!isLoggedIn) {
+			toast.error("Please sign in to add novels to your library");
 			router.push("/login");
 			return;
 		}
-
-		setError(null);
 
 		startTransition(async () => {
 			const result = inLibrary
@@ -38,32 +35,30 @@ export function AddToLibraryButton({
 				: await addToLibrary(novelId);
 
 			if (result.error) {
-				setError(result.error);
+				toast.error(result.error);
 			} else {
 				setInLibrary(!inLibrary);
+				toast.success(inLibrary ? "Removed from library" : "Added to library");
 			}
 		});
 	}
 
 	return (
-		<div className="space-y-2">
-			<Button
-				onClick={handleClick}
-				disabled={isPending}
-				variant={inLibrary ? "secondary" : "outline"}
-				className="w-full"
-				size="lg"
-			>
-				{isPending ? (
-					<Loader2 className="mr-2 h-5 w-5 animate-spin" />
-				) : inLibrary ? (
-					<Check className="mr-2 h-5 w-5" />
-				) : (
-					<Library className="mr-2 h-5 w-5" />
-				)}
-				{inLibrary ? "In Library" : "Add to Library"}
-			</Button>
-			{error && <p className="text-sm text-destructive text-center">{error}</p>}
-		</div>
+		<Button
+			onClick={handleClick}
+			disabled={isPending}
+			variant={inLibrary ? "secondary" : "outline"}
+			className="w-full"
+			size="lg"
+		>
+			{isPending ? (
+				<Loader2 className="mr-2 h-5 w-5 animate-spin" />
+			) : inLibrary ? (
+				<Check className="mr-2 h-5 w-5" />
+			) : (
+				<Library className="mr-2 h-5 w-5" />
+			)}
+			{inLibrary ? "In Library" : "Add to Library"}
+		</Button>
 	);
 }
