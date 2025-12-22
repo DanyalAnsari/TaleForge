@@ -5,6 +5,7 @@ import { getServerSession } from "@/lib/auth-server";
 import { ChapterNavigation } from "@/components/reader/chapter-navigation";
 import { ReaderSettings } from "@/components/reader/reader-settings";
 import { ReadingProgressTracker } from "@/components/reader/reading-progress-tracker";
+import { CommentsSection } from "@/components/comments/comments-section";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { formatDate } from "@/lib/utils";
@@ -158,6 +159,11 @@ export default async function ChapterPage({ params }: ChapterPageProps) {
 					prevChapter={prevChapter}
 					nextChapter={nextChapter}
 				/>
+
+				{/* Comments Section */}
+				<div className="mt-12">
+					<CommentsSection chapterId={chapter.id} />
+				</div>
 			</article>
 
 			{/* Bottom navigation (mobile friendly) */}
