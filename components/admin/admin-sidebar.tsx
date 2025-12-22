@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { Separator } from "@/components/ui/separator";
 import {
 	LayoutDashboard,
 	Users,
@@ -11,6 +12,8 @@ import {
 	Shield,
 	Settings,
 	BarChart3,
+	UserPlus,
+	Home,
 } from "lucide-react";
 
 const navItems = [
@@ -23,6 +26,11 @@ const navItems = [
 		title: "Users",
 		href: "/admin/users",
 		icon: Users,
+	},
+	{
+		title: "Author Requests",
+		href: "/admin/requests",
+		icon: UserPlus,
 	},
 	{
 		title: "Novels",
@@ -78,6 +86,33 @@ export function AdminSidebar() {
 						</Link>
 					);
 				})}
+
+				<Separator className="my-2" />
+
+				<p className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+					Quick Links
+				</p>
+				<Link
+					href="/"
+					className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+				>
+					<Home className="h-4 w-4" />
+					View Site
+				</Link>
+				<Link
+					href="/dashboard"
+					className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+				>
+					<Users className="h-4 w-4" />
+					Reader Dashboard
+				</Link>
+				<Link
+					href="/author"
+					className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+				>
+					<BookOpen className="h-4 w-4" />
+					Author Dashboard
+				</Link>
 			</nav>
 		</aside>
 	);

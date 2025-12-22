@@ -1,18 +1,21 @@
+import Link from "next/link";
 import prisma from "@/lib/prisma";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { formatNumber } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { RequestActions } from "@/components/admin/request-actions";
+import { formatNumber, formatDate } from "@/lib/utils";
 import {
 	Users,
 	BookOpen,
 	FileText,
 	Eye,
-	TrendingUp,
 	UserPlus,
+	ArrowRight,
 } from "lucide-react";
 
 async function getAdminStats() {
 	const now = new Date();
-	const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
 	const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
 
 	const [
@@ -21,8 +24,7 @@ async function getAdminStats() {
 		totalChapters,
 		totalViews,
 		newUsersThisWeek,
-		newNovelsThisMonth,
-		usersByRole,
+		pendingRequests,
 		recentUsers,
 		recentNovels,
 	] = await Promise.all([
@@ -33,12 +35,15 @@ async function getAdminStats() {
 		prisma.user.count({
 			where: { createdAt: { gte: sevenDaysAgo } },
 		}),
-		prisma.novel.count({
-			where: { createdAt: { gte: thirtyDaysAgo } },
-		}),
-		prisma.user.groupBy({
-			by: ["role"],
-			_count: { role: true },
+		prisma.authorRequest.findMany({
+			where: { status: "PENDING" },
+			include: {
+				user: {
+					select: { id: true, name: true, email: true, createdAt: true },
+				},
+			},
+			orderBy: { createdAt: "desc" },
+			take: 5,
 		}),
 		prisma.user.findMany({
 			orderBy: { createdAt: "desc" },
@@ -61,19 +66,13 @@ async function getAdminStats() {
 		}),
 	]);
 
-	const roleStats = usersByRole.reduce((acc, { role, _count }) => {
-		acc[role] = _count.role;
-		return acc;
-	}, {} as Record<string, number>);
-
 	return {
 		totalUsers,
 		totalNovels,
 		totalChapters,
 		totalViews: totalViews._sum.views || 0,
 		newUsersThisWeek,
-		newNovelsThisMonth,
-		roleStats,
+		pendingRequests,
 		recentUsers,
 		recentNovels,
 	};
@@ -93,34 +92,37 @@ export default async function AdminDashboardPage() {
 
 			{/* Stats Grid */}
 			<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-				<Card>
-					<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-						<CardTitle className="text-sm font-medium">Total Users</CardTitle>
-						<Users className="h-4 w-4 text-muted-foreground" />
-					</CardHeader>
-					<CardContent>
-						<div className="text-2xl font-bold">
-							{formatNumber(stats.totalUsers)}
-						</div>
-						<p className="text-xs text-muted-foreground">
-							+{stats.newUsersThisWeek} this week
-						</p>
-					</CardContent>
-				</Card>
-				<Card>
-					<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-						<CardTitle className="text-sm font-medium">Total Novels</CardTitle>
-						<BookOpen className="h-4 w-4 text-muted-foreground" />
-					</CardHeader>
-					<CardContent>
-						<div className="text-2xl font-bold">
-							{formatNumber(stats.totalNovels)}
-						</div>
-						<p className="text-xs text-muted-foreground">
-							+{stats.newNovelsThisMonth} this month
-						</p>
-					</CardContent>
-				</Card>
+				<Link href="/admin/users">
+					<Card className="hover:bg-muted/50 transition-colors cursor-pointer">
+						<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+							<CardTitle className="text-sm font-medium">Total Users</CardTitle>
+							<Users className="h-4 w-4 text-muted-foreground" />
+						</CardHeader>
+						<CardContent>
+							<div className="text-2xl font-bold">
+								{formatNumber(stats.totalUsers)}
+							</div>
+							<p className="text-xs text-muted-foreground">
+								+{stats.newUsersThisWeek} this week
+							</p>
+						</CardContent>
+					</Card>
+				</Link>
+				<Link href="/admin/novels">
+					<Card className="hover:bg-muted/50 transition-colors cursor-pointer">
+						<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+							<CardTitle className="text-sm font-medium">
+								Total Novels
+							</CardTitle>
+							<BookOpen className="h-4 w-4 text-muted-foreground" />
+						</CardHeader>
+						<CardContent>
+							<div className="text-2xl font-bold">
+								{formatNumber(stats.totalNovels)}
+							</div>
+						</CardContent>
+					</Card>
+				</Link>
 				<Card>
 					<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
 						<CardTitle className="text-sm font-medium">
@@ -147,46 +149,56 @@ export default async function AdminDashboardPage() {
 				</Card>
 			</div>
 
-			{/* User Role Stats */}
-			<div className="grid gap-4 md:grid-cols-3">
-				<Card>
-					<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-						<CardTitle className="text-sm font-medium">Readers</CardTitle>
-						<Users className="h-4 w-4 text-blue-500" />
+			{/* Pending Author Requests */}
+			{stats.pendingRequests.length > 0 && (
+				<Card className="border-yellow-500/50">
+					<CardHeader className="flex flex-row items-center justify-between">
+						<div className="flex items-center gap-2">
+							<UserPlus className="h-5 w-5 text-yellow-500" />
+							<CardTitle>Pending Author Requests</CardTitle>
+							<Badge
+								variant="secondary"
+								className="bg-yellow-100 text-yellow-700"
+							>
+								{stats.pendingRequests.length}
+							</Badge>
+						</div>
+						<Button variant="ghost" size="sm" asChild>
+							<Link href="/admin/requests">
+								View All
+								<ArrowRight className="ml-2 h-4 w-4" />
+							</Link>
+						</Button>
 					</CardHeader>
 					<CardContent>
-						<div className="text-2xl font-bold">
-							{stats.roleStats.READER || 0}
+						<div className="space-y-4">
+							{stats.pendingRequests.map((request) => (
+								<div
+									key={request.id}
+									className="flex items-center justify-between border-b pb-4 last:border-0 last:pb-0"
+								>
+									<div>
+										<p className="font-medium">{request.user.name}</p>
+										<p className="text-sm text-muted-foreground">
+											{request.user.email}
+										</p>
+										<p className="text-xs text-muted-foreground">
+											Requested {formatDate(request.createdAt)}
+										</p>
+									</div>
+									<RequestActions
+										requestId={request.id}
+										userName={request.user.name}
+									/>
+								</div>
+							))}
 						</div>
 					</CardContent>
 				</Card>
-				<Card>
-					<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-						<CardTitle className="text-sm font-medium">Authors</CardTitle>
-						<UserPlus className="h-4 w-4 text-green-500" />
-					</CardHeader>
-					<CardContent>
-						<div className="text-2xl font-bold">
-							{stats.roleStats.AUTHOR || 0}
-						</div>
-					</CardContent>
-				</Card>
-				<Card>
-					<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-						<CardTitle className="text-sm font-medium">Admins</CardTitle>
-						<TrendingUp className="h-4 w-4 text-purple-500" />
-					</CardHeader>
-					<CardContent>
-						<div className="text-2xl font-bold">
-							{stats.roleStats.ADMIN || 0}
-						</div>
-					</CardContent>
-				</Card>
-			</div>
+			)}
 
 			{/* Recent Activity */}
 			<div className="grid gap-6 md:grid-cols-2">
-				{/* Recent Users */}
 				<Card>
 					<CardHeader>
 						<CardTitle>Recent Users</CardTitle>
@@ -221,7 +233,6 @@ export default async function AdminDashboardPage() {
 					</CardContent>
 				</Card>
 
-				{/* Recent Novels */}
 				<Card>
 					<CardHeader>
 						<CardTitle>Recent Novels</CardTitle>
