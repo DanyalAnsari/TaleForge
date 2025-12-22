@@ -9,7 +9,10 @@ import {
 	PlusCircle,
 	BarChart3,
 	Settings,
+	MessageSquare,
+	User,
 } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 
 const navItems = [
 	{
@@ -26,6 +29,11 @@ const navItems = [
 		title: "Create Novel",
 		href: "/author/novels/new",
 		icon: PlusCircle,
+	},
+	{
+		title: "Feedback",
+		href: "/author/feedback",
+		icon: MessageSquare,
 	},
 	{
 		title: "Analytics",
@@ -68,6 +76,26 @@ export function AuthorSidebar() {
 						</Link>
 					);
 				})}
+
+				<Separator className="my-2" />
+
+				<p className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+					Quick Links
+				</p>
+				<Link
+					href="/dashboard"
+					className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+				>
+					<User className="h-4 w-4" />
+					Reader Dashboard
+				</Link>
+				<Link
+					href="/novels"
+					className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+				>
+					<BookOpen className="h-4 w-4" />
+					Browse Novels
+				</Link>
 			</nav>
 		</aside>
 	);
