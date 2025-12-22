@@ -9,8 +9,18 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ChapterList } from "@/components/novels/chapter-list";
 import { AddToLibraryButton } from "@/components/novels/add-to-library-button";
+import { ReviewsSection } from "@/components/reviews/reviews-section";
+import { StarRating } from "@/components/reviews/star-rating";
 import { formatNumber, formatDate } from "@/lib/utils";
-import { BookOpen, Eye, Calendar, User, Clock, PlayCircle } from "lucide-react";
+import {
+	BookOpen,
+	Eye,
+	Calendar,
+	User,
+	Clock,
+	PlayCircle,
+	Star,
+} from "lucide-react";
 
 interface NovelPageProps {
 	params: Promise<{ slug: string }>;
@@ -40,13 +50,25 @@ async function getNovel(slug: string) {
 					createdAt: true,
 				},
 			},
+			reviews: {
+				select: { rating: true },
+			},
 			_count: {
-				select: { chapters: true },
+				select: { chapters: true, reviews: true },
 			},
 		},
 	});
 
-	return novel;
+	if (!novel) return null;
+
+	// Calculate average rating
+	const averageRating =
+		novel.reviews.length > 0
+			? novel.reviews.reduce((sum, r) => sum + r.rating, 0) /
+			  novel.reviews.length
+			: 0;
+
+	return { ...novel, averageRating };
 }
 
 async function getLibraryStatus(novelId: string, userId?: string) {
@@ -136,6 +158,18 @@ export default async function NovelPage({ params }: NovelPageProps) {
 
 					<Card>
 						<CardContent className="pt-6 space-y-4">
+							{/* Average Rating */}
+							{novel._count.reviews > 0 && (
+								<div className="flex items-center gap-2">
+									<Star className="h-4 w-4 text-yellow-400 fill-yellow-400" />
+									<span className="font-medium">
+										{novel.averageRating.toFixed(1)}
+									</span>
+									<span className="text-sm text-muted-foreground">
+										({novel._count.reviews} reviews)
+									</span>
+								</div>
+							)}
 							<div className="flex items-center gap-2">
 								<User className="h-4 w-4 text-muted-foreground" />
 								<span className="text-sm">
@@ -181,7 +215,7 @@ export default async function NovelPage({ params }: NovelPageProps) {
 					</Card>
 				</div>
 
-				{/* Right column - Details and chapters */}
+				{/* Right column - Details, chapters, and reviews */}
 				<div className="lg:col-span-2 space-y-6">
 					<div>
 						<div className="flex items-start justify-between gap-4">
@@ -230,6 +264,9 @@ export default async function NovelPage({ params }: NovelPageProps) {
 							<ChapterList chapters={novel.chapters} novelSlug={novel.slug} />
 						</CardContent>
 					</Card>
+
+					{/* Reviews Section */}
+					<ReviewsSection novelId={novel.id} authorId={novel.author.id} />
 				</div>
 			</div>
 		</div>
