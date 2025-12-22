@@ -1,5 +1,3 @@
-// components/novels/novel-grid.tsx
-
 import { NovelCard } from "./novel-card";
 
 interface Novel {
@@ -10,6 +8,7 @@ interface Novel {
 	coverImageUrl: string | null;
 	status: string;
 	views: number;
+	updatedAt: Date;
 	author: {
 		name: string;
 	};
@@ -26,9 +25,10 @@ interface Novel {
 
 interface NovelGridProps {
 	novels: Novel[];
+	libraryNovelIds?: string[];
 }
 
-export function NovelGrid({ novels }: NovelGridProps) {
+export function NovelGrid({ novels, libraryNovelIds = [] }: NovelGridProps) {
 	if (novels.length === 0) {
 		return (
 			<div className="text-center py-12">
@@ -40,7 +40,11 @@ export function NovelGrid({ novels }: NovelGridProps) {
 	return (
 		<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
 			{novels.map((novel) => (
-				<NovelCard key={novel.id} novel={novel} />
+				<NovelCard
+					key={novel.id}
+					novel={novel}
+					isInLibrary={libraryNovelIds.includes(novel.id)}
+				/>
 			))}
 		</div>
 	);

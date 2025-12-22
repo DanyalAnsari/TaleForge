@@ -6,12 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { NovelStatus } from "@/prisma/generated/prisma/enums";
 import Link from "next/link";
 import { Metadata } from "next";
-
-const NOVELS_PER_PAGE = 10;
-
-interface NovelsPageProps {
-	searchParams: Promise<{ page?: string; status?: string; tag?: string }>;
-}
+import { getServerSession } from "@/lib/auth-server";
 
 export const metadata: Metadata = {
 	title: "Browse Novels | WebNovel",
@@ -23,6 +18,23 @@ export const metadata: Metadata = {
 			"Explore our collection of web novels. Filter by genre, status, and tags to find your perfect read.",
 	},
 };
+
+const NOVELS_PER_PAGE = 10;
+
+interface NovelsPageProps {
+	searchParams: Promise<{ page?: string; status?: string; tag?: string }>;
+}
+
+async function getUserLibraryIds(userId?: string): Promise<string[]> {
+	if (!userId) return [];
+
+	const entries = await prisma.libraryEntry.findMany({
+		where: { userId },
+		select: { novelId: true },
+	});
+
+	return entries.map((e) => e.novelId);
+}
 
 async function getNovels(page: number, status?: string, tagSlug?: string) {
 	const where = {
@@ -97,10 +109,14 @@ export default async function NovelsPage({ searchParams }: NovelsPageProps) {
 	const status = params.status;
 	const tag = params.tag;
 
-	const [{ novels, totalPages, total }, tags] = await Promise.all([
-		getNovels(page, status, tag),
-		getTags(),
-	]);
+	const session = await getServerSession();
+
+	const [{ novels, totalPages, total }, tags, libraryNovelIds] =
+		await Promise.all([
+			getNovels(page, status, tag),
+			getTags(),
+			getUserLibraryIds(session?.user?.id),
+		]);
 
 	return (
 		<div className="container py-8">
@@ -125,7 +141,7 @@ export default async function NovelsPage({ searchParams }: NovelsPageProps) {
 						All
 					</Link>
 					{["ONGOING", "COMPLETED", "HIATUS"].map((s) => (
-						<a
+						<Link
 							key={s}
 							href={`/novels?status=${s}`}
 							className={`px-3 py-1 rounded-full text-sm transition-colors ${
@@ -135,7 +151,7 @@ export default async function NovelsPage({ searchParams }: NovelsPageProps) {
 							}`}
 						>
 							{s.charAt(0) + s.slice(1).toLowerCase()}
-						</a>
+						</Link>
 					))}
 				</div>
 
@@ -157,7 +173,7 @@ export default async function NovelsPage({ searchParams }: NovelsPageProps) {
 				</div>
 
 				<Suspense fallback={<NovelGridSkeleton />}>
-					<NovelGrid novels={novels} />
+					<NovelGrid novels={novels} libraryNovelIds={libraryNovelIds} />
 				</Suspense>
 
 				<PaginationNav

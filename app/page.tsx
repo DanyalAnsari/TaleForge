@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma";
 import { NovelGrid } from "@/components/novels/novel-grid";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, BookOpen, PenTool, Users, TrendingUp } from "lucide-react";
+import { getServerSession } from "@/lib/auth-server";
 
 async function getLatestNovels() {
 	return await prisma.novel.findMany({
@@ -40,12 +41,26 @@ async function getStats() {
 	return { novelCount, chapterCount, authorCount };
 }
 
+async function getUserLibraryIds(userId?: string): Promise<string[]> {
+	if (!userId) return [];
+
+	const entries = await prisma.libraryEntry.findMany({
+		where: { userId },
+		select: { novelId: true },
+	});
+
+	return entries.map((e) => e.novelId);
+}
+
 export default async function HomePage() {
-	const [latestNovels, popularNovels, stats] = await Promise.all([
-		getLatestNovels(),
-		getPopularNovels(),
-		getStats(),
-	]);
+	const session = await getServerSession();
+	const [latestNovels, popularNovels, stats, libraryNovelIds] =
+		await Promise.all([
+			getLatestNovels(),
+			getPopularNovels(),
+			getStats(),
+			getUserLibraryIds(session?.user?.id),
+		]);
 
 	return (
 		<div className="flex flex-col">
@@ -124,7 +139,7 @@ export default async function HomePage() {
 							</Link>
 						</Button>
 					</div>
-					<NovelGrid novels={popularNovels} />
+					<NovelGrid novels={popularNovels} libraryNovelIds={libraryNovelIds} />
 				</div>
 			</section>
 
@@ -143,7 +158,7 @@ export default async function HomePage() {
 							</Link>
 						</Button>
 					</div>
-					<NovelGrid novels={latestNovels} />
+					<NovelGrid novels={latestNovels} libraryNovelIds={libraryNovelIds} />
 				</div>
 			</section>
 
