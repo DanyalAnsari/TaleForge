@@ -1,5 +1,3 @@
-// components/dashboard/mobile-nav.tsx
-
 "use client";
 
 import { useState } from "react";
@@ -16,11 +14,12 @@ import {
 } from "@/components/ui/sheet";
 import {
 	LayoutDashboard,
-	Library,
-	BookOpen,
 	User,
 	Settings,
 	Menu,
+	MessageSquare,
+	Star,
+	Library,
 } from "lucide-react";
 
 const navItems = [
@@ -35,9 +34,14 @@ const navItems = [
 		icon: Library,
 	},
 	{
-		title: "Reading History",
-		href: "/dashboard/history",
-		icon: BookOpen,
+		title: "My Comments",
+		href: "/dashboard/comments",
+		icon: MessageSquare,
+	},
+	{
+		title: "My Reviews",
+		href: "/dashboard/reviews",
+		icon: Star,
 	},
 	{
 		title: "Profile",

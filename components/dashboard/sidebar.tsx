@@ -6,9 +6,10 @@ import { cn } from "@/lib/utils";
 import {
 	LayoutDashboard,
 	Library,
-	BookOpen,
 	User,
 	Settings,
+	MessageSquare,
+	Star,
 } from "lucide-react";
 
 const navItems = [
@@ -23,9 +24,14 @@ const navItems = [
 		icon: Library,
 	},
 	{
-		title: "Reading History",
-		href: "/dashboard/history",
-		icon: BookOpen,
+		title: "My Comments",
+		href: "/dashboard/comments",
+		icon: MessageSquare,
+	},
+	{
+		title: "My Reviews",
+		href: "/dashboard/reviews",
+		icon: Star,
 	},
 	{
 		title: "Profile",
