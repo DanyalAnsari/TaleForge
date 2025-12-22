@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { formatDate } from "@/lib/utils";
 import { BookOpen, Eye } from "lucide-react";
+import { ViewTracker } from "@/components/reader/view-tracker";
 
 interface ChapterPageProps {
 	params: Promise<{ slug: string; number: string }>;
@@ -84,14 +85,6 @@ export default async function ChapterPage({ params }: ChapterPageProps) {
 
 	const { novel, chapter, prevChapter, nextChapter, totalChapters } = data;
 
-	// Increment view count (fire and forget)
-	prisma.chapter
-		.update({
-			where: { id: chapter.id },
-			data: { views: { increment: 1 } },
-		})
-		.catch(() => {});
-
 	return (
 		<div className="min-h-screen">
 			{/* Reading Progress Tracker */}
@@ -100,6 +93,7 @@ export default async function ChapterPage({ params }: ChapterPageProps) {
 				chapterId={chapter.id}
 				isLoggedIn={!!session}
 			/>
+			<ViewTracker chapterId={chapter.id} />
 
 			{/* Header */}
 			<div className="sticky top-16 z-40 bg-background/95 backdrop-blur border-b">
