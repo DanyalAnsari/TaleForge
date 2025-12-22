@@ -34,6 +34,8 @@ model User {
   accounts Account[]
   novels   Novel[]
   library  LibraryEntry[]
+  comments ChapterComment[]
+  reviews  NovelReview[]
 
   @@unique([email])
   @@map("user")
@@ -105,6 +107,7 @@ model Novel {
   chapters Chapter[]
   tags     NovelTag[]
   library  LibraryEntry[]
+  reviews  NovelReview[]
 
   @@map("novel")
 }
@@ -120,8 +123,9 @@ model Chapter {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  novel   Novel          @relation(fields: [novelId], references: [id], onDelete: Cascade)
-  readers LibraryEntry[] @relation("LastReadChapter")
+  novel    Novel            @relation(fields: [novelId], references: [id], onDelete: Cascade)
+  readers  LibraryEntry[]   @relation("LastReadChapter")
+  comments ChapterComment[]
 
   @@unique([novelId, chapterNumber])
   @@map("chapter")
@@ -161,4 +165,35 @@ model LibraryEntry {
 
   @@unique([userId, novelId])
   @@map("library_entry")
+}
+
+model ChapterComment {
+  id        String   @id @default(cuid())
+  content   String   @db.Text
+  chapterId String
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("chapter_comment")
+}
+
+model NovelReview {
+  id        String   @id @default(cuid())
+  rating    Int // 1-5
+  title     String?
+  body      String   @db.Text
+  novelId   String
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  novel Novel @relation(fields: [novelId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([novelId, userId])
+  @@map("novel_review")
 }

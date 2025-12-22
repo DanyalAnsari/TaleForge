@@ -59,7 +59,9 @@ export const ModelName = {
   Chapter: 'Chapter',
   Tag: 'Tag',
   NovelTag: 'NovelTag',
-  LibraryEntry: 'LibraryEntry'
+  LibraryEntry: 'LibraryEntry',
+  ChapterComment: 'ChapterComment',
+  NovelReview: 'NovelReview'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -197,6 +199,32 @@ export const LibraryEntryScalarFieldEnum = {
 } as const
 
 export type LibraryEntryScalarFieldEnum = (typeof LibraryEntryScalarFieldEnum)[keyof typeof LibraryEntryScalarFieldEnum]
+
+
+export const ChapterCommentScalarFieldEnum = {
+  id: 'id',
+  content: 'content',
+  chapterId: 'chapterId',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ChapterCommentScalarFieldEnum = (typeof ChapterCommentScalarFieldEnum)[keyof typeof ChapterCommentScalarFieldEnum]
+
+
+export const NovelReviewScalarFieldEnum = {
+  id: 'id',
+  rating: 'rating',
+  title: 'title',
+  body: 'body',
+  novelId: 'novelId',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NovelReviewScalarFieldEnum = (typeof NovelReviewScalarFieldEnum)[keyof typeof NovelReviewScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -268,6 +268,7 @@ export type NovelWhereInput = {
   chapters?: Prisma.ChapterListRelationFilter
   tags?: Prisma.NovelTagListRelationFilter
   library?: Prisma.LibraryEntryListRelationFilter
+  reviews?: Prisma.NovelReviewListRelationFilter
 }
 
 export type NovelOrderByWithRelationInput = {
@@ -286,6 +287,7 @@ export type NovelOrderByWithRelationInput = {
   chapters?: Prisma.ChapterOrderByRelationAggregateInput
   tags?: Prisma.NovelTagOrderByRelationAggregateInput
   library?: Prisma.LibraryEntryOrderByRelationAggregateInput
+  reviews?: Prisma.NovelReviewOrderByRelationAggregateInput
 }
 
 export type NovelWhereUniqueInput = Prisma.AtLeast<{
@@ -307,6 +309,7 @@ export type NovelWhereUniqueInput = Prisma.AtLeast<{
   chapters?: Prisma.ChapterListRelationFilter
   tags?: Prisma.NovelTagListRelationFilter
   library?: Prisma.LibraryEntryListRelationFilter
+  reviews?: Prisma.NovelReviewListRelationFilter
 }, "id" | "slug">
 
 export type NovelOrderByWithAggregationInput = {
@@ -360,6 +363,7 @@ export type NovelCreateInput = {
   chapters?: Prisma.ChapterCreateNestedManyWithoutNovelInput
   tags?: Prisma.NovelTagCreateNestedManyWithoutNovelInput
   library?: Prisma.LibraryEntryCreateNestedManyWithoutNovelInput
+  reviews?: Prisma.NovelReviewCreateNestedManyWithoutNovelInput
 }
 
 export type NovelUncheckedCreateInput = {
@@ -377,6 +381,7 @@ export type NovelUncheckedCreateInput = {
   chapters?: Prisma.ChapterUncheckedCreateNestedManyWithoutNovelInput
   tags?: Prisma.NovelTagUncheckedCreateNestedManyWithoutNovelInput
   library?: Prisma.LibraryEntryUncheckedCreateNestedManyWithoutNovelInput
+  reviews?: Prisma.NovelReviewUncheckedCreateNestedManyWithoutNovelInput
 }
 
 export type NovelUpdateInput = {
@@ -394,6 +399,7 @@ export type NovelUpdateInput = {
   chapters?: Prisma.ChapterUpdateManyWithoutNovelNestedInput
   tags?: Prisma.NovelTagUpdateManyWithoutNovelNestedInput
   library?: Prisma.LibraryEntryUpdateManyWithoutNovelNestedInput
+  reviews?: Prisma.NovelReviewUpdateManyWithoutNovelNestedInput
 }
 
 export type NovelUncheckedUpdateInput = {
@@ -411,6 +417,7 @@ export type NovelUncheckedUpdateInput = {
   chapters?: Prisma.ChapterUncheckedUpdateManyWithoutNovelNestedInput
   tags?: Prisma.NovelTagUncheckedUpdateManyWithoutNovelNestedInput
   library?: Prisma.LibraryEntryUncheckedUpdateManyWithoutNovelNestedInput
+  reviews?: Prisma.NovelReviewUncheckedUpdateManyWithoutNovelNestedInput
 }
 
 export type NovelCreateManyInput = {
@@ -615,6 +622,20 @@ export type NovelUpdateOneRequiredWithoutLibraryNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.NovelUpdateToOneWithWhereWithoutLibraryInput, Prisma.NovelUpdateWithoutLibraryInput>, Prisma.NovelUncheckedUpdateWithoutLibraryInput>
 }
 
+export type NovelCreateNestedOneWithoutReviewsInput = {
+  create?: Prisma.XOR<Prisma.NovelCreateWithoutReviewsInput, Prisma.NovelUncheckedCreateWithoutReviewsInput>
+  connectOrCreate?: Prisma.NovelCreateOrConnectWithoutReviewsInput
+  connect?: Prisma.NovelWhereUniqueInput
+}
+
+export type NovelUpdateOneRequiredWithoutReviewsNestedInput = {
+  create?: Prisma.XOR<Prisma.NovelCreateWithoutReviewsInput, Prisma.NovelUncheckedCreateWithoutReviewsInput>
+  connectOrCreate?: Prisma.NovelCreateOrConnectWithoutReviewsInput
+  upsert?: Prisma.NovelUpsertWithoutReviewsInput
+  connect?: Prisma.NovelWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.NovelUpdateToOneWithWhereWithoutReviewsInput, Prisma.NovelUpdateWithoutReviewsInput>, Prisma.NovelUncheckedUpdateWithoutReviewsInput>
+}
+
 export type NovelCreateWithoutAuthorInput = {
   id?: string
   title: string
@@ -629,6 +650,7 @@ export type NovelCreateWithoutAuthorInput = {
   chapters?: Prisma.ChapterCreateNestedManyWithoutNovelInput
   tags?: Prisma.NovelTagCreateNestedManyWithoutNovelInput
   library?: Prisma.LibraryEntryCreateNestedManyWithoutNovelInput
+  reviews?: Prisma.NovelReviewCreateNestedManyWithoutNovelInput
 }
 
 export type NovelUncheckedCreateWithoutAuthorInput = {
@@ -645,6 +667,7 @@ export type NovelUncheckedCreateWithoutAuthorInput = {
   chapters?: Prisma.ChapterUncheckedCreateNestedManyWithoutNovelInput
   tags?: Prisma.NovelTagUncheckedCreateNestedManyWithoutNovelInput
   library?: Prisma.LibraryEntryUncheckedCreateNestedManyWithoutNovelInput
+  reviews?: Prisma.NovelReviewUncheckedCreateNestedManyWithoutNovelInput
 }
 
 export type NovelCreateOrConnectWithoutAuthorInput = {
@@ -704,6 +727,7 @@ export type NovelCreateWithoutChaptersInput = {
   author: Prisma.UserCreateNestedOneWithoutNovelsInput
   tags?: Prisma.NovelTagCreateNestedManyWithoutNovelInput
   library?: Prisma.LibraryEntryCreateNestedManyWithoutNovelInput
+  reviews?: Prisma.NovelReviewCreateNestedManyWithoutNovelInput
 }
 
 export type NovelUncheckedCreateWithoutChaptersInput = {
@@ -720,6 +744,7 @@ export type NovelUncheckedCreateWithoutChaptersInput = {
   updatedAt?: Date | string
   tags?: Prisma.NovelTagUncheckedCreateNestedManyWithoutNovelInput
   library?: Prisma.LibraryEntryUncheckedCreateNestedManyWithoutNovelInput
+  reviews?: Prisma.NovelReviewUncheckedCreateNestedManyWithoutNovelInput
 }
 
 export type NovelCreateOrConnectWithoutChaptersInput = {
@@ -752,6 +777,7 @@ export type NovelUpdateWithoutChaptersInput = {
   author?: Prisma.UserUpdateOneRequiredWithoutNovelsNestedInput
   tags?: Prisma.NovelTagUpdateManyWithoutNovelNestedInput
   library?: Prisma.LibraryEntryUpdateManyWithoutNovelNestedInput
+  reviews?: Prisma.NovelReviewUpdateManyWithoutNovelNestedInput
 }
 
 export type NovelUncheckedUpdateWithoutChaptersInput = {
@@ -768,6 +794,7 @@ export type NovelUncheckedUpdateWithoutChaptersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tags?: Prisma.NovelTagUncheckedUpdateManyWithoutNovelNestedInput
   library?: Prisma.LibraryEntryUncheckedUpdateManyWithoutNovelNestedInput
+  reviews?: Prisma.NovelReviewUncheckedUpdateManyWithoutNovelNestedInput
 }
 
 export type NovelCreateWithoutTagsInput = {
@@ -784,6 +811,7 @@ export type NovelCreateWithoutTagsInput = {
   author: Prisma.UserCreateNestedOneWithoutNovelsInput
   chapters?: Prisma.ChapterCreateNestedManyWithoutNovelInput
   library?: Prisma.LibraryEntryCreateNestedManyWithoutNovelInput
+  reviews?: Prisma.NovelReviewCreateNestedManyWithoutNovelInput
 }
 
 export type NovelUncheckedCreateWithoutTagsInput = {
@@ -800,6 +828,7 @@ export type NovelUncheckedCreateWithoutTagsInput = {
   updatedAt?: Date | string
   chapters?: Prisma.ChapterUncheckedCreateNestedManyWithoutNovelInput
   library?: Prisma.LibraryEntryUncheckedCreateNestedManyWithoutNovelInput
+  reviews?: Prisma.NovelReviewUncheckedCreateNestedManyWithoutNovelInput
 }
 
 export type NovelCreateOrConnectWithoutTagsInput = {
@@ -832,6 +861,7 @@ export type NovelUpdateWithoutTagsInput = {
   author?: Prisma.UserUpdateOneRequiredWithoutNovelsNestedInput
   chapters?: Prisma.ChapterUpdateManyWithoutNovelNestedInput
   library?: Prisma.LibraryEntryUpdateManyWithoutNovelNestedInput
+  reviews?: Prisma.NovelReviewUpdateManyWithoutNovelNestedInput
 }
 
 export type NovelUncheckedUpdateWithoutTagsInput = {
@@ -848,6 +878,7 @@ export type NovelUncheckedUpdateWithoutTagsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   chapters?: Prisma.ChapterUncheckedUpdateManyWithoutNovelNestedInput
   library?: Prisma.LibraryEntryUncheckedUpdateManyWithoutNovelNestedInput
+  reviews?: Prisma.NovelReviewUncheckedUpdateManyWithoutNovelNestedInput
 }
 
 export type NovelCreateWithoutLibraryInput = {
@@ -864,6 +895,7 @@ export type NovelCreateWithoutLibraryInput = {
   author: Prisma.UserCreateNestedOneWithoutNovelsInput
   chapters?: Prisma.ChapterCreateNestedManyWithoutNovelInput
   tags?: Prisma.NovelTagCreateNestedManyWithoutNovelInput
+  reviews?: Prisma.NovelReviewCreateNestedManyWithoutNovelInput
 }
 
 export type NovelUncheckedCreateWithoutLibraryInput = {
@@ -880,6 +912,7 @@ export type NovelUncheckedCreateWithoutLibraryInput = {
   updatedAt?: Date | string
   chapters?: Prisma.ChapterUncheckedCreateNestedManyWithoutNovelInput
   tags?: Prisma.NovelTagUncheckedCreateNestedManyWithoutNovelInput
+  reviews?: Prisma.NovelReviewUncheckedCreateNestedManyWithoutNovelInput
 }
 
 export type NovelCreateOrConnectWithoutLibraryInput = {
@@ -912,6 +945,7 @@ export type NovelUpdateWithoutLibraryInput = {
   author?: Prisma.UserUpdateOneRequiredWithoutNovelsNestedInput
   chapters?: Prisma.ChapterUpdateManyWithoutNovelNestedInput
   tags?: Prisma.NovelTagUpdateManyWithoutNovelNestedInput
+  reviews?: Prisma.NovelReviewUpdateManyWithoutNovelNestedInput
 }
 
 export type NovelUncheckedUpdateWithoutLibraryInput = {
@@ -928,6 +962,91 @@ export type NovelUncheckedUpdateWithoutLibraryInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   chapters?: Prisma.ChapterUncheckedUpdateManyWithoutNovelNestedInput
   tags?: Prisma.NovelTagUncheckedUpdateManyWithoutNovelNestedInput
+  reviews?: Prisma.NovelReviewUncheckedUpdateManyWithoutNovelNestedInput
+}
+
+export type NovelCreateWithoutReviewsInput = {
+  id?: string
+  title: string
+  slug: string
+  description: string
+  coverImageUrl?: string | null
+  status?: $Enums.NovelStatus
+  isVisible?: boolean
+  views?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  author: Prisma.UserCreateNestedOneWithoutNovelsInput
+  chapters?: Prisma.ChapterCreateNestedManyWithoutNovelInput
+  tags?: Prisma.NovelTagCreateNestedManyWithoutNovelInput
+  library?: Prisma.LibraryEntryCreateNestedManyWithoutNovelInput
+}
+
+export type NovelUncheckedCreateWithoutReviewsInput = {
+  id?: string
+  title: string
+  slug: string
+  description: string
+  coverImageUrl?: string | null
+  status?: $Enums.NovelStatus
+  isVisible?: boolean
+  views?: number
+  authorId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  chapters?: Prisma.ChapterUncheckedCreateNestedManyWithoutNovelInput
+  tags?: Prisma.NovelTagUncheckedCreateNestedManyWithoutNovelInput
+  library?: Prisma.LibraryEntryUncheckedCreateNestedManyWithoutNovelInput
+}
+
+export type NovelCreateOrConnectWithoutReviewsInput = {
+  where: Prisma.NovelWhereUniqueInput
+  create: Prisma.XOR<Prisma.NovelCreateWithoutReviewsInput, Prisma.NovelUncheckedCreateWithoutReviewsInput>
+}
+
+export type NovelUpsertWithoutReviewsInput = {
+  update: Prisma.XOR<Prisma.NovelUpdateWithoutReviewsInput, Prisma.NovelUncheckedUpdateWithoutReviewsInput>
+  create: Prisma.XOR<Prisma.NovelCreateWithoutReviewsInput, Prisma.NovelUncheckedCreateWithoutReviewsInput>
+  where?: Prisma.NovelWhereInput
+}
+
+export type NovelUpdateToOneWithWhereWithoutReviewsInput = {
+  where?: Prisma.NovelWhereInput
+  data: Prisma.XOR<Prisma.NovelUpdateWithoutReviewsInput, Prisma.NovelUncheckedUpdateWithoutReviewsInput>
+}
+
+export type NovelUpdateWithoutReviewsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  coverImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumNovelStatusFieldUpdateOperationsInput | $Enums.NovelStatus
+  isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  views?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  author?: Prisma.UserUpdateOneRequiredWithoutNovelsNestedInput
+  chapters?: Prisma.ChapterUpdateManyWithoutNovelNestedInput
+  tags?: Prisma.NovelTagUpdateManyWithoutNovelNestedInput
+  library?: Prisma.LibraryEntryUpdateManyWithoutNovelNestedInput
+}
+
+export type NovelUncheckedUpdateWithoutReviewsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  coverImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumNovelStatusFieldUpdateOperationsInput | $Enums.NovelStatus
+  isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  views?: Prisma.IntFieldUpdateOperationsInput | number
+  authorId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  chapters?: Prisma.ChapterUncheckedUpdateManyWithoutNovelNestedInput
+  tags?: Prisma.NovelTagUncheckedUpdateManyWithoutNovelNestedInput
+  library?: Prisma.LibraryEntryUncheckedUpdateManyWithoutNovelNestedInput
 }
 
 export type NovelCreateManyAuthorInput = {
@@ -957,6 +1076,7 @@ export type NovelUpdateWithoutAuthorInput = {
   chapters?: Prisma.ChapterUpdateManyWithoutNovelNestedInput
   tags?: Prisma.NovelTagUpdateManyWithoutNovelNestedInput
   library?: Prisma.LibraryEntryUpdateManyWithoutNovelNestedInput
+  reviews?: Prisma.NovelReviewUpdateManyWithoutNovelNestedInput
 }
 
 export type NovelUncheckedUpdateWithoutAuthorInput = {
@@ -973,6 +1093,7 @@ export type NovelUncheckedUpdateWithoutAuthorInput = {
   chapters?: Prisma.ChapterUncheckedUpdateManyWithoutNovelNestedInput
   tags?: Prisma.NovelTagUncheckedUpdateManyWithoutNovelNestedInput
   library?: Prisma.LibraryEntryUncheckedUpdateManyWithoutNovelNestedInput
+  reviews?: Prisma.NovelReviewUncheckedUpdateManyWithoutNovelNestedInput
 }
 
 export type NovelUncheckedUpdateManyWithoutAuthorInput = {
@@ -997,12 +1118,14 @@ export type NovelCountOutputType = {
   chapters: number
   tags: number
   library: number
+  reviews: number
 }
 
 export type NovelCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   chapters?: boolean | NovelCountOutputTypeCountChaptersArgs
   tags?: boolean | NovelCountOutputTypeCountTagsArgs
   library?: boolean | NovelCountOutputTypeCountLibraryArgs
+  reviews?: boolean | NovelCountOutputTypeCountReviewsArgs
 }
 
 /**
@@ -1036,6 +1159,13 @@ export type NovelCountOutputTypeCountLibraryArgs<ExtArgs extends runtime.Types.E
   where?: Prisma.LibraryEntryWhereInput
 }
 
+/**
+ * NovelCountOutputType without action
+ */
+export type NovelCountOutputTypeCountReviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NovelReviewWhereInput
+}
+
 
 export type NovelSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1053,6 +1183,7 @@ export type NovelSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   chapters?: boolean | Prisma.Novel$chaptersArgs<ExtArgs>
   tags?: boolean | Prisma.Novel$tagsArgs<ExtArgs>
   library?: boolean | Prisma.Novel$libraryArgs<ExtArgs>
+  reviews?: boolean | Prisma.Novel$reviewsArgs<ExtArgs>
   _count?: boolean | Prisma.NovelCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["novel"]>
 
@@ -1106,6 +1237,7 @@ export type NovelInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   chapters?: boolean | Prisma.Novel$chaptersArgs<ExtArgs>
   tags?: boolean | Prisma.Novel$tagsArgs<ExtArgs>
   library?: boolean | Prisma.Novel$libraryArgs<ExtArgs>
+  reviews?: boolean | Prisma.Novel$reviewsArgs<ExtArgs>
   _count?: boolean | Prisma.NovelCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type NovelIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1122,6 +1254,7 @@ export type $NovelPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     chapters: Prisma.$ChapterPayload<ExtArgs>[]
     tags: Prisma.$NovelTagPayload<ExtArgs>[]
     library: Prisma.$LibraryEntryPayload<ExtArgs>[]
+    reviews: Prisma.$NovelReviewPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1533,6 +1666,7 @@ export interface Prisma__NovelClient<T, Null = never, ExtArgs extends runtime.Ty
   chapters<T extends Prisma.Novel$chaptersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Novel$chaptersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChapterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   tags<T extends Prisma.Novel$tagsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Novel$tagsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NovelTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   library<T extends Prisma.Novel$libraryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Novel$libraryArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LibraryEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  reviews<T extends Prisma.Novel$reviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Novel$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NovelReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2038,6 +2172,30 @@ export type Novel$libraryArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.LibraryEntryScalarFieldEnum | Prisma.LibraryEntryScalarFieldEnum[]
+}
+
+/**
+ * Novel.reviews
+ */
+export type Novel$reviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NovelReview
+   */
+  select?: Prisma.NovelReviewSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NovelReview
+   */
+  omit?: Prisma.NovelReviewOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NovelReviewInclude<ExtArgs> | null
+  where?: Prisma.NovelReviewWhereInput
+  orderBy?: Prisma.NovelReviewOrderByWithRelationInput | Prisma.NovelReviewOrderByWithRelationInput[]
+  cursor?: Prisma.NovelReviewWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NovelReviewScalarFieldEnum | Prisma.NovelReviewScalarFieldEnum[]
 }
 
 /**

@@ -218,6 +218,8 @@ export type UserWhereInput = {
   accounts?: Prisma.AccountListRelationFilter
   novels?: Prisma.NovelListRelationFilter
   library?: Prisma.LibraryEntryListRelationFilter
+  comments?: Prisma.ChapterCommentListRelationFilter
+  reviews?: Prisma.NovelReviewListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -234,6 +236,8 @@ export type UserOrderByWithRelationInput = {
   accounts?: Prisma.AccountOrderByRelationAggregateInput
   novels?: Prisma.NovelOrderByRelationAggregateInput
   library?: Prisma.LibraryEntryOrderByRelationAggregateInput
+  comments?: Prisma.ChapterCommentOrderByRelationAggregateInput
+  reviews?: Prisma.NovelReviewOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -253,6 +257,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   accounts?: Prisma.AccountListRelationFilter
   novels?: Prisma.NovelListRelationFilter
   library?: Prisma.LibraryEntryListRelationFilter
+  comments?: Prisma.ChapterCommentListRelationFilter
+  reviews?: Prisma.NovelReviewListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -299,6 +305,8 @@ export type UserCreateInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   novels?: Prisma.NovelCreateNestedManyWithoutAuthorInput
   library?: Prisma.LibraryEntryCreateNestedManyWithoutUserInput
+  comments?: Prisma.ChapterCommentCreateNestedManyWithoutUserInput
+  reviews?: Prisma.NovelReviewCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -315,6 +323,8 @@ export type UserUncheckedCreateInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   novels?: Prisma.NovelUncheckedCreateNestedManyWithoutAuthorInput
   library?: Prisma.LibraryEntryUncheckedCreateNestedManyWithoutUserInput
+  comments?: Prisma.ChapterCommentUncheckedCreateNestedManyWithoutUserInput
+  reviews?: Prisma.NovelReviewUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -331,6 +341,8 @@ export type UserUpdateInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   novels?: Prisma.NovelUpdateManyWithoutAuthorNestedInput
   library?: Prisma.LibraryEntryUpdateManyWithoutUserNestedInput
+  comments?: Prisma.ChapterCommentUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.NovelReviewUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -347,6 +359,8 @@ export type UserUncheckedUpdateInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   novels?: Prisma.NovelUncheckedUpdateManyWithoutAuthorNestedInput
   library?: Prisma.LibraryEntryUncheckedUpdateManyWithoutUserNestedInput
+  comments?: Prisma.ChapterCommentUncheckedUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.NovelReviewUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -502,6 +516,34 @@ export type UserUpdateOneRequiredWithoutLibraryNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutLibraryInput, Prisma.UserUpdateWithoutLibraryInput>, Prisma.UserUncheckedUpdateWithoutLibraryInput>
 }
 
+export type UserCreateNestedOneWithoutCommentsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCommentsInput, Prisma.UserUncheckedCreateWithoutCommentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCommentsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCommentsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCommentsInput, Prisma.UserUncheckedCreateWithoutCommentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCommentsInput
+  upsert?: Prisma.UserUpsertWithoutCommentsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCommentsInput, Prisma.UserUpdateWithoutCommentsInput>, Prisma.UserUncheckedUpdateWithoutCommentsInput>
+}
+
+export type UserCreateNestedOneWithoutReviewsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReviewsInput, Prisma.UserUncheckedCreateWithoutReviewsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReviewsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutReviewsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReviewsInput, Prisma.UserUncheckedCreateWithoutReviewsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReviewsInput
+  upsert?: Prisma.UserUpsertWithoutReviewsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutReviewsInput, Prisma.UserUpdateWithoutReviewsInput>, Prisma.UserUncheckedUpdateWithoutReviewsInput>
+}
+
 export type UserCreateWithoutSessionsInput = {
   id?: string
   name: string
@@ -515,6 +557,8 @@ export type UserCreateWithoutSessionsInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   novels?: Prisma.NovelCreateNestedManyWithoutAuthorInput
   library?: Prisma.LibraryEntryCreateNestedManyWithoutUserInput
+  comments?: Prisma.ChapterCommentCreateNestedManyWithoutUserInput
+  reviews?: Prisma.NovelReviewCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -530,6 +574,8 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   novels?: Prisma.NovelUncheckedCreateNestedManyWithoutAuthorInput
   library?: Prisma.LibraryEntryUncheckedCreateNestedManyWithoutUserInput
+  comments?: Prisma.ChapterCommentUncheckedCreateNestedManyWithoutUserInput
+  reviews?: Prisma.NovelReviewUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -561,6 +607,8 @@ export type UserUpdateWithoutSessionsInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   novels?: Prisma.NovelUpdateManyWithoutAuthorNestedInput
   library?: Prisma.LibraryEntryUpdateManyWithoutUserNestedInput
+  comments?: Prisma.ChapterCommentUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.NovelReviewUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -576,6 +624,8 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   novels?: Prisma.NovelUncheckedUpdateManyWithoutAuthorNestedInput
   library?: Prisma.LibraryEntryUncheckedUpdateManyWithoutUserNestedInput
+  comments?: Prisma.ChapterCommentUncheckedUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.NovelReviewUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
@@ -591,6 +641,8 @@ export type UserCreateWithoutAccountsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   novels?: Prisma.NovelCreateNestedManyWithoutAuthorInput
   library?: Prisma.LibraryEntryCreateNestedManyWithoutUserInput
+  comments?: Prisma.ChapterCommentCreateNestedManyWithoutUserInput
+  reviews?: Prisma.NovelReviewCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -606,6 +658,8 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   novels?: Prisma.NovelUncheckedCreateNestedManyWithoutAuthorInput
   library?: Prisma.LibraryEntryUncheckedCreateNestedManyWithoutUserInput
+  comments?: Prisma.ChapterCommentUncheckedCreateNestedManyWithoutUserInput
+  reviews?: Prisma.NovelReviewUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -637,6 +691,8 @@ export type UserUpdateWithoutAccountsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   novels?: Prisma.NovelUpdateManyWithoutAuthorNestedInput
   library?: Prisma.LibraryEntryUpdateManyWithoutUserNestedInput
+  comments?: Prisma.ChapterCommentUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.NovelReviewUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -652,6 +708,8 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   novels?: Prisma.NovelUncheckedUpdateManyWithoutAuthorNestedInput
   library?: Prisma.LibraryEntryUncheckedUpdateManyWithoutUserNestedInput
+  comments?: Prisma.ChapterCommentUncheckedUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.NovelReviewUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutNovelsInput = {
@@ -667,6 +725,8 @@ export type UserCreateWithoutNovelsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   library?: Prisma.LibraryEntryCreateNestedManyWithoutUserInput
+  comments?: Prisma.ChapterCommentCreateNestedManyWithoutUserInput
+  reviews?: Prisma.NovelReviewCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutNovelsInput = {
@@ -682,6 +742,8 @@ export type UserUncheckedCreateWithoutNovelsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   library?: Prisma.LibraryEntryUncheckedCreateNestedManyWithoutUserInput
+  comments?: Prisma.ChapterCommentUncheckedCreateNestedManyWithoutUserInput
+  reviews?: Prisma.NovelReviewUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutNovelsInput = {
@@ -713,6 +775,8 @@ export type UserUpdateWithoutNovelsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   library?: Prisma.LibraryEntryUpdateManyWithoutUserNestedInput
+  comments?: Prisma.ChapterCommentUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.NovelReviewUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNovelsInput = {
@@ -728,6 +792,8 @@ export type UserUncheckedUpdateWithoutNovelsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   library?: Prisma.LibraryEntryUncheckedUpdateManyWithoutUserNestedInput
+  comments?: Prisma.ChapterCommentUncheckedUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.NovelReviewUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutLibraryInput = {
@@ -743,6 +809,8 @@ export type UserCreateWithoutLibraryInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   novels?: Prisma.NovelCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.ChapterCommentCreateNestedManyWithoutUserInput
+  reviews?: Prisma.NovelReviewCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutLibraryInput = {
@@ -758,6 +826,8 @@ export type UserUncheckedCreateWithoutLibraryInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   novels?: Prisma.NovelUncheckedCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.ChapterCommentUncheckedCreateNestedManyWithoutUserInput
+  reviews?: Prisma.NovelReviewUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutLibraryInput = {
@@ -789,6 +859,8 @@ export type UserUpdateWithoutLibraryInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   novels?: Prisma.NovelUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.ChapterCommentUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.NovelReviewUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLibraryInput = {
@@ -804,6 +876,176 @@ export type UserUncheckedUpdateWithoutLibraryInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   novels?: Prisma.NovelUncheckedUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.ChapterCommentUncheckedUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.NovelReviewUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutCommentsInput = {
+  id?: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: $Enums.Role
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  novels?: Prisma.NovelCreateNestedManyWithoutAuthorInput
+  library?: Prisma.LibraryEntryCreateNestedManyWithoutUserInput
+  reviews?: Prisma.NovelReviewCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutCommentsInput = {
+  id?: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: $Enums.Role
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  novels?: Prisma.NovelUncheckedCreateNestedManyWithoutAuthorInput
+  library?: Prisma.LibraryEntryUncheckedCreateNestedManyWithoutUserInput
+  reviews?: Prisma.NovelReviewUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutCommentsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCommentsInput, Prisma.UserUncheckedCreateWithoutCommentsInput>
+}
+
+export type UserUpsertWithoutCommentsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCommentsInput, Prisma.UserUncheckedUpdateWithoutCommentsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCommentsInput, Prisma.UserUncheckedCreateWithoutCommentsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCommentsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCommentsInput, Prisma.UserUncheckedUpdateWithoutCommentsInput>
+}
+
+export type UserUpdateWithoutCommentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  novels?: Prisma.NovelUpdateManyWithoutAuthorNestedInput
+  library?: Prisma.LibraryEntryUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.NovelReviewUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCommentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  novels?: Prisma.NovelUncheckedUpdateManyWithoutAuthorNestedInput
+  library?: Prisma.LibraryEntryUncheckedUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.NovelReviewUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutReviewsInput = {
+  id?: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: $Enums.Role
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  novels?: Prisma.NovelCreateNestedManyWithoutAuthorInput
+  library?: Prisma.LibraryEntryCreateNestedManyWithoutUserInput
+  comments?: Prisma.ChapterCommentCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutReviewsInput = {
+  id?: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: $Enums.Role
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  novels?: Prisma.NovelUncheckedCreateNestedManyWithoutAuthorInput
+  library?: Prisma.LibraryEntryUncheckedCreateNestedManyWithoutUserInput
+  comments?: Prisma.ChapterCommentUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutReviewsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutReviewsInput, Prisma.UserUncheckedCreateWithoutReviewsInput>
+}
+
+export type UserUpsertWithoutReviewsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutReviewsInput, Prisma.UserUncheckedUpdateWithoutReviewsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutReviewsInput, Prisma.UserUncheckedCreateWithoutReviewsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutReviewsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutReviewsInput, Prisma.UserUncheckedUpdateWithoutReviewsInput>
+}
+
+export type UserUpdateWithoutReviewsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  novels?: Prisma.NovelUpdateManyWithoutAuthorNestedInput
+  library?: Prisma.LibraryEntryUpdateManyWithoutUserNestedInput
+  comments?: Prisma.ChapterCommentUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutReviewsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  novels?: Prisma.NovelUncheckedUpdateManyWithoutAuthorNestedInput
+  library?: Prisma.LibraryEntryUncheckedUpdateManyWithoutUserNestedInput
+  comments?: Prisma.ChapterCommentUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -816,6 +1058,8 @@ export type UserCountOutputType = {
   accounts: number
   novels: number
   library: number
+  comments: number
+  reviews: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -823,6 +1067,8 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   accounts?: boolean | UserCountOutputTypeCountAccountsArgs
   novels?: boolean | UserCountOutputTypeCountNovelsArgs
   library?: boolean | UserCountOutputTypeCountLibraryArgs
+  comments?: boolean | UserCountOutputTypeCountCommentsArgs
+  reviews?: boolean | UserCountOutputTypeCountReviewsArgs
 }
 
 /**
@@ -863,6 +1109,20 @@ export type UserCountOutputTypeCountLibraryArgs<ExtArgs extends runtime.Types.Ex
   where?: Prisma.LibraryEntryWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCommentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ChapterCommentWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountReviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NovelReviewWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -878,6 +1138,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   novels?: boolean | Prisma.User$novelsArgs<ExtArgs>
   library?: boolean | Prisma.User$libraryArgs<ExtArgs>
+  comments?: boolean | Prisma.User$commentsArgs<ExtArgs>
+  reviews?: boolean | Prisma.User$reviewsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -923,6 +1185,8 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   novels?: boolean | Prisma.User$novelsArgs<ExtArgs>
   library?: boolean | Prisma.User$libraryArgs<ExtArgs>
+  comments?: boolean | Prisma.User$commentsArgs<ExtArgs>
+  reviews?: boolean | Prisma.User$reviewsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -935,6 +1199,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     accounts: Prisma.$AccountPayload<ExtArgs>[]
     novels: Prisma.$NovelPayload<ExtArgs>[]
     library: Prisma.$LibraryEntryPayload<ExtArgs>[]
+    comments: Prisma.$ChapterCommentPayload<ExtArgs>[]
+    reviews: Prisma.$NovelReviewPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1344,6 +1610,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   accounts<T extends Prisma.User$accountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   novels<T extends Prisma.User$novelsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$novelsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NovelPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   library<T extends Prisma.User$libraryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$libraryArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LibraryEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  comments<T extends Prisma.User$commentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChapterCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  reviews<T extends Prisma.User$reviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NovelReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1863,6 +2131,54 @@ export type User$libraryArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   distinct?: Prisma.LibraryEntryScalarFieldEnum | Prisma.LibraryEntryScalarFieldEnum[]
+}
+
+/**
+ * User.comments
+ */
+export type User$commentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ChapterComment
+   */
+  select?: Prisma.ChapterCommentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ChapterComment
+   */
+  omit?: Prisma.ChapterCommentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ChapterCommentInclude<ExtArgs> | null
+  where?: Prisma.ChapterCommentWhereInput
+  orderBy?: Prisma.ChapterCommentOrderByWithRelationInput | Prisma.ChapterCommentOrderByWithRelationInput[]
+  cursor?: Prisma.ChapterCommentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ChapterCommentScalarFieldEnum | Prisma.ChapterCommentScalarFieldEnum[]
+}
+
+/**
+ * User.reviews
+ */
+export type User$reviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NovelReview
+   */
+  select?: Prisma.NovelReviewSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NovelReview
+   */
+  omit?: Prisma.NovelReviewOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NovelReviewInclude<ExtArgs> | null
+  where?: Prisma.NovelReviewWhereInput
+  orderBy?: Prisma.NovelReviewOrderByWithRelationInput | Prisma.NovelReviewOrderByWithRelationInput[]
+  cursor?: Prisma.NovelReviewWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NovelReviewScalarFieldEnum | Prisma.NovelReviewScalarFieldEnum[]
 }
 
 /**

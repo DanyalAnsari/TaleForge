@@ -392,7 +392,9 @@ export const ModelName = {
   Chapter: 'Chapter',
   Tag: 'Tag',
   NovelTag: 'NovelTag',
-  LibraryEntry: 'LibraryEntry'
+  LibraryEntry: 'LibraryEntry',
+  ChapterComment: 'ChapterComment',
+  NovelReview: 'NovelReview'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -408,7 +410,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "novel" | "chapter" | "tag" | "novelTag" | "libraryEntry"
+    modelProps: "user" | "session" | "account" | "verification" | "novel" | "chapter" | "tag" | "novelTag" | "libraryEntry" | "chapterComment" | "novelReview"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1078,6 +1080,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ChapterComment: {
+      payload: Prisma.$ChapterCommentPayload<ExtArgs>
+      fields: Prisma.ChapterCommentFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ChapterCommentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChapterCommentPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ChapterCommentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChapterCommentPayload>
+        }
+        findFirst: {
+          args: Prisma.ChapterCommentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChapterCommentPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ChapterCommentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChapterCommentPayload>
+        }
+        findMany: {
+          args: Prisma.ChapterCommentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChapterCommentPayload>[]
+        }
+        create: {
+          args: Prisma.ChapterCommentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChapterCommentPayload>
+        }
+        createMany: {
+          args: Prisma.ChapterCommentCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ChapterCommentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChapterCommentPayload>[]
+        }
+        delete: {
+          args: Prisma.ChapterCommentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChapterCommentPayload>
+        }
+        update: {
+          args: Prisma.ChapterCommentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChapterCommentPayload>
+        }
+        deleteMany: {
+          args: Prisma.ChapterCommentDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ChapterCommentUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ChapterCommentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChapterCommentPayload>[]
+        }
+        upsert: {
+          args: Prisma.ChapterCommentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChapterCommentPayload>
+        }
+        aggregate: {
+          args: Prisma.ChapterCommentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateChapterComment>
+        }
+        groupBy: {
+          args: Prisma.ChapterCommentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ChapterCommentGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ChapterCommentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ChapterCommentCountAggregateOutputType> | number
+        }
+      }
+    }
+    NovelReview: {
+      payload: Prisma.$NovelReviewPayload<ExtArgs>
+      fields: Prisma.NovelReviewFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NovelReviewFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NovelReviewPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NovelReviewFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NovelReviewPayload>
+        }
+        findFirst: {
+          args: Prisma.NovelReviewFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NovelReviewPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NovelReviewFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NovelReviewPayload>
+        }
+        findMany: {
+          args: Prisma.NovelReviewFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NovelReviewPayload>[]
+        }
+        create: {
+          args: Prisma.NovelReviewCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NovelReviewPayload>
+        }
+        createMany: {
+          args: Prisma.NovelReviewCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NovelReviewCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NovelReviewPayload>[]
+        }
+        delete: {
+          args: Prisma.NovelReviewDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NovelReviewPayload>
+        }
+        update: {
+          args: Prisma.NovelReviewUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NovelReviewPayload>
+        }
+        deleteMany: {
+          args: Prisma.NovelReviewDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NovelReviewUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NovelReviewUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NovelReviewPayload>[]
+        }
+        upsert: {
+          args: Prisma.NovelReviewUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NovelReviewPayload>
+        }
+        aggregate: {
+          args: Prisma.NovelReviewAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNovelReview>
+        }
+        groupBy: {
+          args: Prisma.NovelReviewGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NovelReviewGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NovelReviewCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NovelReviewCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1236,6 +1386,32 @@ export const LibraryEntryScalarFieldEnum = {
 } as const
 
 export type LibraryEntryScalarFieldEnum = (typeof LibraryEntryScalarFieldEnum)[keyof typeof LibraryEntryScalarFieldEnum]
+
+
+export const ChapterCommentScalarFieldEnum = {
+  id: 'id',
+  content: 'content',
+  chapterId: 'chapterId',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ChapterCommentScalarFieldEnum = (typeof ChapterCommentScalarFieldEnum)[keyof typeof ChapterCommentScalarFieldEnum]
+
+
+export const NovelReviewScalarFieldEnum = {
+  id: 'id',
+  rating: 'rating',
+  title: 'title',
+  body: 'body',
+  novelId: 'novelId',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NovelReviewScalarFieldEnum = (typeof NovelReviewScalarFieldEnum)[keyof typeof NovelReviewScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1462,6 +1638,8 @@ export type GlobalOmitConfig = {
   tag?: Prisma.TagOmit
   novelTag?: Prisma.NovelTagOmit
   libraryEntry?: Prisma.LibraryEntryOmit
+  chapterComment?: Prisma.ChapterCommentOmit
+  novelReview?: Prisma.NovelReviewOmit
 }
 
 /* Types for Logging */

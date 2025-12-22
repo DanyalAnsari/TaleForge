@@ -84,3 +84,13 @@ export type NovelTag = Prisma.NovelTagModel
  * 
  */
 export type LibraryEntry = Prisma.LibraryEntryModel
+/**
+ * Model ChapterComment
+ * 
+ */
+export type ChapterComment = Prisma.ChapterCommentModel
+/**
+ * Model NovelReview
+ * 
+ */
+export type NovelReview = Prisma.NovelReviewModel
