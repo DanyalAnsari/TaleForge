@@ -3,10 +3,22 @@ import prisma from "@/lib/prisma";
 import { SearchForm } from "@/components/search/search-form";
 import { NovelGrid } from "@/components/novels/novel-grid";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Metadata } from "next";
 
 interface SearchPageProps {
 	searchParams: Promise<{ q?: string }>;
 }
+
+export const metadata: Metadata = {
+	title: "Search Novels | WebNovel",
+	description:
+		"Search for novels by title, author, or tags. Find your next favorite story on WebNovel.",
+	openGraph: {
+		title: "Search Novels | WebNovel",
+		description:
+			"Search for novels by title, author, or tags. Find your next favorite story on WebNovel.",
+	},
+};
 
 async function searchNovels(query: string) {
 	if (!query.trim()) return [];

@@ -4,12 +4,25 @@ import { NovelGrid } from "@/components/novels/novel-grid";
 import { PaginationNav } from "@/components/ui/pagination-nav";
 import { Skeleton } from "@/components/ui/skeleton";
 import { NovelStatus } from "@/prisma/generated/prisma/enums";
+import Link from "next/link";
+import { Metadata } from "next";
 
 const NOVELS_PER_PAGE = 10;
 
 interface NovelsPageProps {
 	searchParams: Promise<{ page?: string; status?: string; tag?: string }>;
 }
+
+export const metadata: Metadata = {
+	title: "Browse Novels | WebNovel",
+	description:
+		"Explore our collection of web novels. Filter by genre, status, and tags to find your perfect read.",
+	openGraph: {
+		title: "Browse Novels | WebNovel",
+		description:
+			"Explore our collection of web novels. Filter by genre, status, and tags to find your perfect read.",
+	},
+};
 
 async function getNovels(page: number, status?: string, tagSlug?: string) {
 	const where = {
@@ -101,7 +114,7 @@ export default async function NovelsPage({ searchParams }: NovelsPageProps) {
 
 				{/* Filters */}
 				<div className="flex flex-wrap gap-2">
-					<a
+					<Link
 						href="/novels"
 						className={`px-3 py-1 rounded-full text-sm transition-colors ${
 							!status && !tag
@@ -110,7 +123,7 @@ export default async function NovelsPage({ searchParams }: NovelsPageProps) {
 						}`}
 					>
 						All
-					</a>
+					</Link>
 					{["ONGOING", "COMPLETED", "HIATUS"].map((s) => (
 						<a
 							key={s}
