@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getServerSession } from "@/lib/auth-server";
-import { UserMenu } from "@/components/user-menu";
+import { UserMenu } from "@/components/layout/user-menu";
 import { Button } from "@/components/ui/button";
 import { BookOpen } from "lucide-react";
 import { User } from "@/prisma/generated/prisma/client";

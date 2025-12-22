@@ -170,47 +170,6 @@ export default async function HomePage() {
 					</div>
 				</div>
 			</section>
-
-			{/* Footer */}
-			<footer className="py-8 px-4 border-t">
-				<div className="container">
-					<div className="flex flex-col md:flex-row items-center justify-between gap-4">
-						<div className="flex items-center gap-2 font-bold text-xl">
-							<BookOpen className="h-6 w-6" />
-							<span>WebNovel</span>
-						</div>
-						<nav className="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
-							<Link
-								href="/novels"
-								className="hover:text-foreground transition-colors"
-							>
-								Browse
-							</Link>
-							<Link
-								href="/search"
-								className="hover:text-foreground transition-colors"
-							>
-								Search
-							</Link>
-							<Link
-								href="/about"
-								className="hover:text-foreground transition-colors"
-							>
-								About
-							</Link>
-							<Link
-								href="/contact"
-								className="hover:text-foreground transition-colors"
-							>
-								Contact
-							</Link>
-						</nav>
-						<p className="text-sm text-muted-foreground">
-							© {new Date().getFullYear()} WebNovel. All rights reserved.
-						</p>
-					</div>
-				</div>
-			</footer>
 		</div>
 	);
 }
