@@ -1,8 +1,10 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import prisma from "@/lib/prisma";
+import { getServerSession } from "@/lib/auth-server";
 import { ChapterNavigation } from "@/components/reader/chapter-navigation";
 import { ReaderSettings } from "@/components/reader/reader-settings";
+import { ReadingProgressTracker } from "@/components/reader/reading-progress-tracker";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { formatDate } from "@/lib/utils";
@@ -22,7 +24,7 @@ async function getChapter(novelSlug: string, chapterNumber: number) {
 			chapters: {
 				where: { isPublished: true },
 				orderBy: { chapterNumber: "asc" },
-				select: { chapterNumber: true },
+				select: { id: true, chapterNumber: true },
 			},
 		},
 	});
@@ -70,7 +72,10 @@ export async function generateMetadata({ params }: ChapterPageProps) {
 
 export default async function ChapterPage({ params }: ChapterPageProps) {
 	const { slug, number } = await params;
-	const data = await getChapter(slug, Number(number));
+	const [data, session] = await Promise.all([
+		getChapter(slug, Number(number)),
+		getServerSession(),
+	]);
 
 	if (!data) {
 		notFound();
@@ -88,6 +93,13 @@ export default async function ChapterPage({ params }: ChapterPageProps) {
 
 	return (
 		<div className="min-h-screen">
+			{/* Reading Progress Tracker */}
+			<ReadingProgressTracker
+				novelId={novel.id}
+				chapterId={chapter.id}
+				isLoggedIn={!!session}
+			/>
+
 			{/* Header */}
 			<div className="sticky top-16 z-40 bg-background/95 backdrop-blur border-b">
 				<div className="container py-3">
