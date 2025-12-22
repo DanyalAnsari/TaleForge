@@ -72,3 +72,8 @@ export type ChapterComment = Prisma.ChapterCommentModel
  * 
  */
 export type NovelReview = Prisma.NovelReviewModel
+/**
+ * Model AuthorRequest
+ * 
+ */
+export type AuthorRequest = Prisma.AuthorRequestModel

@@ -25,3 +25,12 @@ export const NovelStatus = {
 } as const
 
 export type NovelStatus = (typeof NovelStatus)[keyof typeof NovelStatus]
+
+
+export const RequestStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type RequestStatus = (typeof RequestStatus)[keyof typeof RequestStatus]

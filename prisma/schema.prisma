@@ -19,6 +19,12 @@ enum NovelStatus {
   HIATUS
 }
 
+enum RequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 model User {
   id            String   @id @default(cuid())
   name          String
@@ -30,12 +36,13 @@ model User {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  sessions Session[]
-  accounts Account[]
-  novels   Novel[]
-  library  LibraryEntry[]
-  comments ChapterComment[]
-  reviews  NovelReview[]
+  sessions      Session[]
+  accounts      Account[]
+  novels        Novel[]
+  library       LibraryEntry[]
+  comments      ChapterComment[]
+  reviews       NovelReview[]
+  authorRequest AuthorRequest?
 
   @@unique([email])
   @@map("user")
@@ -196,4 +203,17 @@ model NovelReview {
 
   @@unique([novelId, userId])
   @@map("novel_review")
+}
+
+model AuthorRequest {
+  id        String        @id @default(cuid())
+  userId    String        @unique
+  reason    String        @db.Text
+  status    RequestStatus @default(PENDING)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("author_request")
 }

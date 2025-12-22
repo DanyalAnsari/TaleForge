@@ -61,7 +61,8 @@ export const ModelName = {
   NovelTag: 'NovelTag',
   LibraryEntry: 'LibraryEntry',
   ChapterComment: 'ChapterComment',
-  NovelReview: 'NovelReview'
+  NovelReview: 'NovelReview',
+  AuthorRequest: 'AuthorRequest'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -225,6 +226,18 @@ export const NovelReviewScalarFieldEnum = {
 } as const
 
 export type NovelReviewScalarFieldEnum = (typeof NovelReviewScalarFieldEnum)[keyof typeof NovelReviewScalarFieldEnum]
+
+
+export const AuthorRequestScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  reason: 'reason',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AuthorRequestScalarFieldEnum = (typeof AuthorRequestScalarFieldEnum)[keyof typeof AuthorRequestScalarFieldEnum]
 
 
 export const SortOrder = {
