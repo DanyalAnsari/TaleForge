@@ -14,6 +14,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { User, PenTool, Shield, LogOut, Library } from "lucide-react";
 import Link from "next/link";
+import { toast } from "sonner";
 
 interface UserMenuProps {
 	user: {
@@ -30,6 +31,7 @@ export function UserMenu({ user }: UserMenuProps) {
 
 	async function handleSignOut() {
 		await signOut();
+		toast.success("Signed out successfully");
 		router.push("/");
 		router.refresh();
 	}
@@ -79,11 +81,18 @@ export function UserMenu({ user }: UserMenuProps) {
 					</Link>
 				</DropdownMenuItem>
 
+				<DropdownMenuItem asChild>
+					<Link href="/dashboard/profile" className="cursor-pointer">
+						<User className="mr-2 h-4 w-4" />
+						Profile
+					</Link>
+				</DropdownMenuItem>
+
 				{(user.role === "AUTHOR" || user.role === "ADMIN") && (
 					<>
 						<DropdownMenuSeparator />
 						<DropdownMenuItem asChild>
-							<Link href="/author/novels" className="cursor-pointer">
+							<Link href="/author" className="cursor-pointer">
 								<PenTool className="mr-2 h-4 w-4" />
 								My Novels
 							</Link>

@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { getPostAuthRedirect } from "@/lib/auth-redirect";
 
 export function LoginForm() {
 	const router = useRouter();
@@ -34,7 +35,8 @@ export function LoginForm() {
 		}
 
 		toast.success("Welcome back!");
-		router.push("/");
+		const redirectUrl = getPostAuthRedirect("/dashboard");
+		router.push(redirectUrl);
 		router.refresh();
 	}
 

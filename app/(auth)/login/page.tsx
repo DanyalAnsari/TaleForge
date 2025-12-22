@@ -1,9 +1,22 @@
-// app/(auth)/login/page.tsx
-
 import { LoginForm } from "@/components/auth/login-form";
+import { RedirectSaver } from "@/components/auth/redirect-saver";
+import { getServerSession } from "@/lib/auth-server";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
-export default function LoginPage() {
+interface LoginPageProps {
+	searchParams: Promise<{ redirect?: string }>;
+}
+
+export default async function LoginPage({ searchParams }: LoginPageProps) {
+	const session = await getServerSession();
+
+	if (session) {
+		redirect("/dashboard");
+	}
+
+	const params = await searchParams;
+	const redirectUrl = params.redirect;
 	return (
 		<div className="min-h-screen flex items-center justify-center px-4">
 			<div className="w-full max-w-md space-y-8">
@@ -13,6 +26,8 @@ export default function LoginPage() {
 						Sign in to continue reading
 					</p>
 				</div>
+
+				{redirectUrl && <RedirectSaver url={redirectUrl} />}
 
 				<LoginForm />
 

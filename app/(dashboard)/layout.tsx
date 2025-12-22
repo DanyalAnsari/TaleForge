@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { getServerSession } from "@/lib/auth-server";
 import { Sidebar } from "@/components/dashboard/sidebar";
 import { MobileNav } from "@/components/dashboard/mobile-nav";
+import { headers } from "next/headers";
 
 export default async function DashboardLayout({
 	children,
@@ -11,7 +12,9 @@ export default async function DashboardLayout({
 	const session = await getServerSession();
 
 	if (!session) {
-		redirect("/login");
+		const headersList = await headers();
+		const pathname = headersList.get("x-pathname") || "/dashboard";
+		redirect(`/login?redirect=${encodeURIComponent(pathname)}`);
 	}
 
 	return (
