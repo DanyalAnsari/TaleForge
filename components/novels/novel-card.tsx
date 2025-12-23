@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Eye, BookOpen, Library } from "lucide-react";
-import { formatNumber } from "@/lib/utils";
+import { formatNumber, formatRelativeTime } from "@/lib/utils";
 
 interface NovelCardProps {
 	novel: {
@@ -29,19 +29,6 @@ interface NovelCardProps {
 		};
 	};
 	isInLibrary?: boolean;
-}
-
-function timeAgo(date: Date): string {
-	const now = new Date();
-	const diff = now.getTime() - new Date(date).getTime();
-	const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-
-	if (days === 0) return "Today";
-	if (days === 1) return "Yesterday";
-	if (days < 7) return `${days} days ago`;
-	if (days < 30) return `${Math.floor(days / 7)} weeks ago`;
-	if (days < 365) return `${Math.floor(days / 30)} months ago`;
-	return `${Math.floor(days / 365)} years ago`;
 }
 
 export function NovelCard({ novel, isInLibrary = false }: NovelCardProps) {
@@ -115,7 +102,7 @@ export function NovelCard({ novel, isInLibrary = false }: NovelCardProps) {
 						</span>
 					</div>
 					<p className="text-xs text-muted-foreground">
-						Updated {timeAgo(novel.updatedAt)}
+						Updated {formatRelativeTime(novel.updatedAt)}
 					</p>
 				</CardContent>
 			</Card>
