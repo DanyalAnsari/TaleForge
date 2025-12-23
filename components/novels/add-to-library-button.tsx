@@ -4,7 +4,6 @@ import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { addToLibrary, removeFromLibrary } from "@/lib/actions/library";
 import { Library, Check, Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { LoginPrompt } from "../auth/login-prompt";
 
