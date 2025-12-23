@@ -2,7 +2,7 @@ import { NovelStatus, Role } from "@/prisma/generated/prisma/enums";
 import { PrismaClient } from "@/prisma/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import "dotenv/config";
-import bcrypt from "bcryptjs";
+import { auth } from "@/lib/auth";
 
 const adapter = new PrismaPg({
 	connectionString: process.env.DATABASE_URL,
@@ -17,6 +17,33 @@ function slugify(text: string): string {
 		.replace(/\s+/g, "-")
 		.replace(/--+/g, "-")
 		.trim();
+}
+
+async function createUser(
+	email: string,
+	password: string,
+	name: string,
+	role: Role
+) {
+	try {
+		await auth.api.signUpEmail({
+			body: { email, password, name },
+		});
+	} catch (error) {
+		// User might already exist, that's fine
+		console.log(`User ${email} might already exist, continuing...`);
+		console.error(error);
+	}
+
+	// Update role and verification regardless
+	return prisma.user.update({
+		where: { email },
+		data: {
+			role,
+			emailVerified: true,
+			isActive: true,
+		},
+	});
 }
 
 async function main() {
@@ -59,99 +86,36 @@ async function main() {
 	// ============================================
 	// Create Admin User
 	// ============================================
-	const admin = await prisma.user.upsert({
-		where: { email: "admin@webnovel.com" },
-		update: {},
-		create: {
-			name: "Admin User",
-			email: "admin@webnovel.com",
-			emailVerified: true,
-			role: Role.ADMIN,
-			isActive: true,
-		},
-	});
-
-	// Create admin account (for Better Auth password login)
-	await prisma.account.upsert({
-		where: {
-			id: `account-${admin.id}`,
-		},
-		update: {},
-		create: {
-			id: `account-${admin.id}`,
-			userId: admin.id,
-			accountId: admin.id,
-			providerId: "credential",
-			// Password: "admin123" - hashed with bcrypt
-			password: await bcrypt.hash("admin123", 10),
-		},
-	});
+	const admin = await createUser(
+		"admin@webnovel.com",
+		"admin123",
+		"Admin User",
+		Role.ADMIN
+	);
 
 	console.log(`✅ Created admin: ${admin.email} (password: admin123)`);
 
 	// ============================================
 	// Create Author User
 	// ============================================
-	const author = await prisma.user.upsert({
-		where: { email: "author@webnovel.com" },
-		update: {},
-		create: {
-			name: "Demo Author",
-			email: "author@webnovel.com",
-			emailVerified: true,
-			role: Role.AUTHOR,
-			isActive: true,
-		},
-	});
-
-	// Create author account
-	await prisma.account.upsert({
-		where: {
-			id: `account-${author.id}`,
-		},
-		update: {},
-		create: {
-			id: `account-${author.id}`,
-			userId: author.id,
-			accountId: author.id,
-			providerId: "credential",
-			// Password: "author123"
-			password: await bcrypt.hash("author123", 10),
-		},
-	});
+	const author = await createUser(
+		"author@webnovel.com",
+		"author123",
+		"Demo Author",
+		Role.AUTHOR
+	);
 
 	console.log(`✅ Created author: ${author.email} (password: author123)`);
 
 	// ============================================
 	// Create Reader User
 	// ============================================
-	const reader = await prisma.user.upsert({
-		where: { email: "reader@webnovel.com" },
-		update: {},
-		create: {
-			name: "Demo Reader",
-			email: "reader@webnovel.com",
-			emailVerified: true,
-			role: Role.READER,
-			isActive: true,
-		},
-	});
-
-	// Create reader account
-	await prisma.account.upsert({
-		where: {
-			id: `account-${reader.id}`,
-		},
-		update: {},
-		create: {
-			id: `account-${reader.id}`,
-			userId: reader.id,
-			accountId: reader.id,
-			providerId: "credential",
-			// Password: "reader123"
-			password: await bcrypt.hash("reader123", 10),
-		},
-	});
+	const reader = await createUser(
+		"reader@webnovel.com",
+		"reader123",
+		"Demo Reader",
+		Role.READER
+	);
 
 	console.log(`✅ Created reader: ${reader.email} (password: reader123)`);
 
