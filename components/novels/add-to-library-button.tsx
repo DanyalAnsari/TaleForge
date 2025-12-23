@@ -6,6 +6,7 @@ import { addToLibrary, removeFromLibrary } from "@/lib/actions/library";
 import { Library, Check, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { LoginPrompt } from "../auth/login-prompt";
 
 interface AddToLibraryButtonProps {
 	novelId: string;
@@ -18,14 +19,14 @@ export function AddToLibraryButton({
 	isInLibrary,
 	isLoggedIn,
 }: AddToLibraryButtonProps) {
-	const router = useRouter();
 	const [isPending, startTransition] = useTransition();
 	const [inLibrary, setInLibrary] = useState(isInLibrary);
+	const [showLoginPrompt, setShowLoginPrompt] = useState(false);
 
 	async function handleClick() {
 		if (!isLoggedIn) {
 			toast.error("Please sign in to add novels to your library");
-			router.push("/login");
+			setShowLoginPrompt(true);
 			return;
 		}
 
@@ -44,21 +45,28 @@ export function AddToLibraryButton({
 	}
 
 	return (
-		<Button
-			onClick={handleClick}
-			disabled={isPending}
-			variant={inLibrary ? "secondary" : "outline"}
-			className="w-full"
-			size="lg"
-		>
-			{isPending ? (
-				<Loader2 className="mr-2 h-5 w-5 animate-spin" />
-			) : inLibrary ? (
-				<Check className="mr-2 h-5 w-5" />
-			) : (
-				<Library className="mr-2 h-5 w-5" />
-			)}
-			{inLibrary ? "In Library" : "Add to Library"}
-		</Button>
+		<>
+			<Button
+				onClick={handleClick}
+				disabled={isPending}
+				variant={inLibrary ? "secondary" : "outline"}
+				className="w-full"
+				size="lg"
+			>
+				{isPending ? (
+					<Loader2 className="mr-2 h-5 w-5 animate-spin" />
+				) : inLibrary ? (
+					<Check className="mr-2 h-5 w-5" />
+				) : (
+					<Library className="mr-2 h-5 w-5" />
+				)}
+				{inLibrary ? "In Library" : "Add to Library"}
+			</Button>
+			<LoginPrompt
+				open={showLoginPrompt}
+				onOpenChange={setShowLoginPrompt}
+				action="add novels to your library"
+			/>
+		</>
 	);
 }
