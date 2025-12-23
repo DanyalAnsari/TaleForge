@@ -38,9 +38,9 @@ export default function RootLayout({
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
 			>
-				<div className="relative min-h-screen flex flex-col items-center">
+				<div className="relative min-h-screen flex flex-col">
 					<Navbar />
-					<main className="flex-1 px-4">{children}</main>
+					<main className="flex-1">{children}</main>
 					<Footer />
 				</div>
 				<Toaster position="bottom-right" richColors />
