@@ -7,10 +7,17 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import {
+	Breadcrumb,
+	BreadcrumbItem,
+	BreadcrumbLink,
+	BreadcrumbList,
+	BreadcrumbPage,
+	BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { ChapterList } from "@/components/novels/chapter-list";
 import { AddToLibraryButton } from "@/components/novels/add-to-library-button";
 import { ReviewsSection } from "@/components/reviews/reviews-section";
-import { StarRating } from "@/components/reviews/star-rating";
 import { formatNumber, formatDate } from "@/lib/utils";
 import {
 	BookOpen,
@@ -61,7 +68,6 @@ async function getNovel(slug: string) {
 
 	if (!novel) return null;
 
-	// Calculate average rating
 	const averageRating =
 		novel.reviews.length > 0
 			? novel.reviews.reduce((sum, r) => sum + r.rating, 0) /
@@ -121,6 +127,25 @@ export default async function NovelPage({ params }: NovelPageProps) {
 
 	return (
 		<div className="container py-8">
+			{/* Breadcrumb */}
+			<Breadcrumb className="mb-6">
+				<BreadcrumbList>
+					<BreadcrumbItem>
+						<BreadcrumbLink href="/">Home</BreadcrumbLink>
+					</BreadcrumbItem>
+					<BreadcrumbSeparator />
+					<BreadcrumbItem>
+						<BreadcrumbLink href="/novels">Novels</BreadcrumbLink>
+					</BreadcrumbItem>
+					<BreadcrumbSeparator />
+					<BreadcrumbItem>
+						<BreadcrumbPage className="max-w-50 truncate">
+							{novel.title}
+						</BreadcrumbPage>
+					</BreadcrumbItem>
+				</BreadcrumbList>
+			</Breadcrumb>
+
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 				{/* Left column - Cover and info */}
 				<div className="lg:col-span-1 space-y-4">
@@ -158,7 +183,6 @@ export default async function NovelPage({ params }: NovelPageProps) {
 
 					<Card>
 						<CardContent className="pt-6 space-y-4">
-							{/* Average Rating */}
 							{novel._count.reviews > 0 && (
 								<div className="flex items-center gap-2">
 									<Star className="h-4 w-4 text-yellow-400 fill-yellow-400" />
@@ -265,7 +289,6 @@ export default async function NovelPage({ params }: NovelPageProps) {
 						</CardContent>
 					</Card>
 
-					{/* Reviews Section */}
 					<ReviewsSection novelId={novel.id} authorId={novel.author.id} />
 				</div>
 			</div>

@@ -1,29 +1,26 @@
 import { Suspense } from "react";
 import prisma from "@/lib/prisma";
+import { getServerSession } from "@/lib/auth-server";
 import { SearchForm } from "@/components/search/search-form";
 import { NovelGrid } from "@/components/novels/novel-grid";
+import { EmptyState } from "@/components/ui/empty-state";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Search, BookOpen } from "lucide-react";
 import { Metadata } from "next";
+
+export const metadata: Metadata = {
+	title: "Search Novels | WebNovel",
+	description: "Search for novels by title, author, or tags.",
+};
 
 interface SearchPageProps {
 	searchParams: Promise<{ q?: string }>;
 }
 
-export const metadata: Metadata = {
-	title: "Search Novels | WebNovel",
-	description:
-		"Search for novels by title, author, or tags. Find your next favorite story on WebNovel.",
-	openGraph: {
-		title: "Search Novels | WebNovel",
-		description:
-			"Search for novels by title, author, or tags. Find your next favorite story on WebNovel.",
-	},
-};
-
 async function searchNovels(query: string) {
 	if (!query.trim()) return [];
 
-	const novels = await prisma.novel.findMany({
+	return prisma.novel.findMany({
 		where: {
 			isVisible: true,
 			OR: [
@@ -40,25 +37,24 @@ async function searchNovels(query: string) {
 			],
 		},
 		include: {
-			author: {
-				select: { name: true },
-			},
-			tags: {
-				include: {
-					tag: {
-						select: { name: true, slug: true },
-					},
-				},
-			},
-			_count: {
-				select: { chapters: true },
-			},
+			author: { select: { name: true } },
+			tags: { include: { tag: { select: { name: true, slug: true } } } },
+			_count: { select: { chapters: true } },
 		},
 		orderBy: [{ views: "desc" }, { updatedAt: "desc" }],
 		take: 20,
 	});
+}
 
-	return novels;
+async function getUserLibraryIds(userId?: string): Promise<string[]> {
+	if (!userId) return [];
+
+	const entries = await prisma.libraryEntry.findMany({
+		where: { userId },
+		select: { novelId: true },
+	});
+
+	return entries.map((e) => e.novelId);
 }
 
 function SearchResultsSkeleton() {
@@ -76,26 +72,33 @@ function SearchResultsSkeleton() {
 }
 
 async function SearchResults({ query }: { query: string }) {
-	const novels = await searchNovels(query);
+	const session = await getServerSession();
+	const [novels, libraryNovelIds] = await Promise.all([
+		searchNovels(query),
+		getUserLibraryIds(session?.user?.id),
+	]);
 
 	if (!query) {
 		return (
-			<div className="text-center py-12 text-muted-foreground">
-				Enter a search term to find novels
-			</div>
+			<EmptyState
+				icon={Search}
+				title="Start searching"
+				description="Enter a search term to find novels by title, author, description, or tags."
+			/>
 		);
 	}
 
 	if (novels.length === 0) {
 		return (
-			<div className="text-center py-12">
-				<p className="text-muted-foreground">
-					No results found for &ldquo;{query}&rdquo;
-				</p>
-				<p className="text-sm text-muted-foreground mt-2">
-					Try different keywords or browse our collection
-				</p>
-			</div>
+			<EmptyState
+				icon={BookOpen}
+				title="No results found"
+				description={`We couldn't find any novels matching "${query}". Try different keywords or browse our collection.`}
+				action={{
+					label: "Browse All Novels",
+					href: "/novels",
+				}}
+			/>
 		);
 	}
 
@@ -105,7 +108,7 @@ async function SearchResults({ query }: { query: string }) {
 				Found {novels.length} result{novels.length !== 1 ? "s" : ""} for &ldquo;
 				{query}&rdquo;
 			</p>
-			<NovelGrid novels={novels} />
+			<NovelGrid novels={novels} libraryNovelIds={libraryNovelIds} />
 		</div>
 	);
 }

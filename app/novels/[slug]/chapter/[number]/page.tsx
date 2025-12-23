@@ -1,16 +1,21 @@
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import prisma from "@/lib/prisma";
 import { getServerSession } from "@/lib/auth-server";
 import { ChapterNavigation } from "@/components/reader/chapter-navigation";
 import { ReaderSettings } from "@/components/reader/reader-settings";
 import { ReadingProgressTracker } from "@/components/reader/reading-progress-tracker";
 import { CommentsSection } from "@/components/comments/comments-section";
-import { Button } from "@/components/ui/button";
+import {
+	Breadcrumb,
+	BreadcrumbItem,
+	BreadcrumbLink,
+	BreadcrumbList,
+	BreadcrumbPage,
+	BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import { formatDate } from "@/lib/utils";
-import { BookOpen, Eye } from "lucide-react";
-import { ViewTracker } from "@/components/reader/view-tracker";
+import { Eye } from "lucide-react";
 
 interface ChapterPageProps {
 	params: Promise<{ slug: string; number: string }>;
@@ -85,6 +90,14 @@ export default async function ChapterPage({ params }: ChapterPageProps) {
 
 	const { novel, chapter, prevChapter, nextChapter, totalChapters } = data;
 
+	// Increment view count (fire and forget)
+	prisma.chapter
+		.update({
+			where: { id: chapter.id },
+			data: { views: { increment: 1 } },
+		})
+		.catch(() => {});
+
 	return (
 		<div className="min-h-screen">
 			{/* Reading Progress Tracker */}
@@ -93,26 +106,31 @@ export default async function ChapterPage({ params }: ChapterPageProps) {
 				chapterId={chapter.id}
 				isLoggedIn={!!session}
 			/>
-			<ViewTracker chapterId={chapter.id} />
 
 			{/* Header */}
 			<div className="sticky top-16 z-40 bg-background/95 backdrop-blur border-b">
 				<div className="container py-3">
 					<div className="flex items-center justify-between">
-						<div className="flex items-center gap-2 min-w-0">
-							<Button variant="ghost" size="sm" asChild>
-								<Link href={`/novels/${novel.slug}`}>
-									<BookOpen className="h-4 w-4 mr-1" />
-									<span className="hidden sm:inline truncate max-w-50">
+						<Breadcrumb>
+							<BreadcrumbList>
+								<BreadcrumbItem>
+									<BreadcrumbLink href="/novels">Novels</BreadcrumbLink>
+								</BreadcrumbItem>
+								<BreadcrumbSeparator />
+								<BreadcrumbItem>
+									<BreadcrumbLink
+										href={`/novels/${novel.slug}`}
+										className="max-w-37.5 truncate"
+									>
 										{novel.title}
-									</span>
-								</Link>
-							</Button>
-							<span className="text-muted-foreground">/</span>
-							<span className="text-sm font-medium truncate">
-								Ch. {chapter.chapterNumber}
-							</span>
-						</div>
+									</BreadcrumbLink>
+								</BreadcrumbItem>
+								<BreadcrumbSeparator />
+								<BreadcrumbItem>
+									<BreadcrumbPage>Ch. {chapter.chapterNumber}</BreadcrumbPage>
+								</BreadcrumbItem>
+							</BreadcrumbList>
+						</Breadcrumb>
 						<ReaderSettings />
 					</div>
 				</div>

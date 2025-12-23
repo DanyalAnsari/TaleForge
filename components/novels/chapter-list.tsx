@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { formatDate, formatNumber } from "@/lib/utils";
-import { Eye, Lock } from "lucide-react";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Eye, Lock, FileText } from "lucide-react";
 
 interface Chapter {
 	id: string;
@@ -19,9 +20,12 @@ interface ChapterListProps {
 export function ChapterList({ chapters, novelSlug }: ChapterListProps) {
 	if (chapters.length === 0) {
 		return (
-			<div className="text-center py-8 text-muted-foreground">
-				No chapters available yet.
-			</div>
+			<EmptyState
+				icon={FileText}
+				title="No chapters yet"
+				description="The author hasn't published any chapters yet. Check back soon!"
+				className="py-8"
+			/>
 		);
 	}
 

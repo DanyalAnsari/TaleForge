@@ -5,9 +5,16 @@ import prisma from "@/lib/prisma";
 import { NovelForm } from "@/components/author/novel-form";
 import { DeleteNovelButton } from "@/components/author/delete-novel-button";
 import { VisibilityToggle } from "@/components/author/visibility-toggle";
+import {
+	Breadcrumb,
+	BreadcrumbItem,
+	BreadcrumbLink,
+	BreadcrumbList,
+	BreadcrumbPage,
+	BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import { FileText, ExternalLink } from "lucide-react";
 
 interface EditNovelPageProps {
@@ -29,7 +36,6 @@ async function getNovel(id: string, userId: string) {
 
 	if (!novel) return null;
 
-	// Check ownership
 	const session = await getServerSession();
 	const userRole = session?.user?.role;
 	if (novel.authorId !== userId && userRole !== "ADMIN") {
@@ -64,6 +70,25 @@ export default async function EditNovelPage({ params }: EditNovelPageProps) {
 
 	return (
 		<div className="space-y-6">
+			{/* Breadcrumb */}
+			<Breadcrumb>
+				<BreadcrumbList>
+					<BreadcrumbItem>
+						<BreadcrumbLink href="/author">Dashboard</BreadcrumbLink>
+					</BreadcrumbItem>
+					<BreadcrumbSeparator />
+					<BreadcrumbItem>
+						<BreadcrumbLink href="/author/novels">My Novels</BreadcrumbLink>
+					</BreadcrumbItem>
+					<BreadcrumbSeparator />
+					<BreadcrumbItem>
+						<BreadcrumbPage className="max-w-50 truncate">
+							{novel.title}
+						</BreadcrumbPage>
+					</BreadcrumbItem>
+				</BreadcrumbList>
+			</Breadcrumb>
+
 			<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 				<div>
 					<h1 className="text-3xl font-bold">Edit Novel</h1>
@@ -73,7 +98,7 @@ export default async function EditNovelPage({ params }: EditNovelPageProps) {
 					<Button variant="outline" asChild>
 						<Link href={`/author/novels/${novel.id}/chapters`}>
 							<FileText className="mr-2 h-4 w-4" />
-							Manage Chapters ({novel._count.chapters})
+							Chapters ({novel._count.chapters})
 						</Link>
 					</Button>
 					<Button variant="outline" asChild>
@@ -109,8 +134,7 @@ export default async function EditNovelPage({ params }: EditNovelPageProps) {
 						</CardHeader>
 						<CardContent className="space-y-4">
 							<p className="text-sm text-muted-foreground">
-								Deleting a novel is permanent and cannot be undone. All chapters
-								will be deleted as well.
+								Deleting a novel is permanent and cannot be undone.
 							</p>
 							<DeleteNovelButton novelId={novel.id} novelTitle={novel.title} />
 						</CardContent>

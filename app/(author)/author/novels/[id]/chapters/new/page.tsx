@@ -1,9 +1,15 @@
 import { notFound, redirect } from "next/navigation";
-import Link from "next/link";
 import { getServerSession } from "@/lib/auth-server";
 import prisma from "@/lib/prisma";
 import { ChapterForm } from "@/components/author/chapter-form";
-import { ArrowLeft } from "lucide-react";
+import {
+	Breadcrumb,
+	BreadcrumbItem,
+	BreadcrumbLink,
+	BreadcrumbList,
+	BreadcrumbPage,
+	BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 interface NewChapterPageProps {
 	params: Promise<{ id: string }>;
@@ -18,7 +24,7 @@ async function getNovel(novelId: string, userId: string) {
 	if (!novel) return null;
 
 	const session = await getServerSession();
-	const userRole = (session?.user)?.role;
+	const userRole = session?.user?.role;
 	if (novel.authorId !== userId && userRole !== "ADMIN") {
 		return null;
 	}
@@ -41,18 +47,42 @@ export default async function NewChapterPage({ params }: NewChapterPageProps) {
 	}
 
 	return (
-		<div className="max-w-3xl">
-			<div className="mb-6">
-				<div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
-					<Link
-						href={`/author/novels/${novel.id}/chapters`}
-						className="hover:text-foreground flex items-center gap-1"
-					>
-						<ArrowLeft className="h-4 w-4" />
-						{novel.title} / Chapters
-					</Link>
-				</div>
+		<div className="max-w-3xl space-y-6">
+			{/* Breadcrumb */}
+			<Breadcrumb>
+				<BreadcrumbList>
+					<BreadcrumbItem>
+						<BreadcrumbLink href="/author">Dashboard</BreadcrumbLink>
+					</BreadcrumbItem>
+					<BreadcrumbSeparator />
+					<BreadcrumbItem>
+						<BreadcrumbLink href="/author/novels">My Novels</BreadcrumbLink>
+					</BreadcrumbItem>
+					<BreadcrumbSeparator />
+					<BreadcrumbItem>
+						<BreadcrumbLink
+							href={`/author/novels/${novel.id}`}
+							className="max-w-37.5 truncate"
+						>
+							{novel.title}
+						</BreadcrumbLink>
+					</BreadcrumbItem>
+					<BreadcrumbSeparator />
+					<BreadcrumbItem>
+						<BreadcrumbLink href={`/author/novels/${novel.id}/chapters`}>
+							Chapters
+						</BreadcrumbLink>
+					</BreadcrumbItem>
+					<BreadcrumbSeparator />
+					<BreadcrumbItem>
+						<BreadcrumbPage>New Chapter</BreadcrumbPage>
+					</BreadcrumbItem>
+				</BreadcrumbList>
+			</Breadcrumb>
+
+			<div>
 				<h1 className="text-3xl font-bold">Add New Chapter</h1>
+				<p className="text-muted-foreground mt-1">{novel.title}</p>
 			</div>
 
 			<ChapterForm novelId={novel.id} />

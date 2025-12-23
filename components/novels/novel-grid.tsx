@@ -1,4 +1,6 @@
 import { NovelCard } from "./novel-card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { BookOpen } from "lucide-react";
 
 interface Novel {
 	id: string;
@@ -26,14 +28,27 @@ interface Novel {
 interface NovelGridProps {
 	novels: Novel[];
 	libraryNovelIds?: string[];
+	emptyMessage?: string;
+	emptyAction?: {
+		label: string;
+		href: string;
+	};
 }
 
-export function NovelGrid({ novels, libraryNovelIds = [] }: NovelGridProps) {
+export function NovelGrid({
+	novels,
+	libraryNovelIds = [],
+	emptyMessage = "No novels found. Check back later for new stories!",
+	emptyAction,
+}: NovelGridProps) {
 	if (novels.length === 0) {
 		return (
-			<div className="text-center py-12">
-				<p className="text-muted-foreground">No novels found.</p>
-			</div>
+			<EmptyState
+				icon={BookOpen}
+				title="No novels found"
+				description={emptyMessage}
+				action={emptyAction}
+			/>
 		);
 	}
 

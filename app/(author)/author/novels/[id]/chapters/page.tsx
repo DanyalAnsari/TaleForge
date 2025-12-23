@@ -2,11 +2,19 @@ import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { getServerSession } from "@/lib/auth-server";
 import prisma from "@/lib/prisma";
+import {
+	Breadcrumb,
+	BreadcrumbItem,
+	BreadcrumbLink,
+	BreadcrumbList,
+	BreadcrumbPage,
+	BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ChapterActions } from "@/components/author/chapter-actions";
-import { PlusCircle, FileText, ArrowLeft } from "lucide-react";
+import { PlusCircle, FileText } from "lucide-react";
 import { formatDate, formatNumber } from "@/lib/utils";
 
 interface ChaptersPageProps {
@@ -26,7 +34,7 @@ async function getNovelWithChapters(novelId: string, userId: string) {
 	if (!novel) return null;
 
 	const session = await getServerSession();
-	const userRole = (session?.user)?.role;
+	const userRole = session?.user?.role;
 	if (novel.authorId !== userId && userRole !== "ADMIN") {
 		return null;
 	}
@@ -50,18 +58,35 @@ export default async function ChaptersPage({ params }: ChaptersPageProps) {
 
 	return (
 		<div className="space-y-6">
+			{/* Breadcrumb */}
+			<Breadcrumb>
+				<BreadcrumbList>
+					<BreadcrumbItem>
+						<BreadcrumbLink href="/author">Dashboard</BreadcrumbLink>
+					</BreadcrumbItem>
+					<BreadcrumbSeparator />
+					<BreadcrumbItem>
+						<BreadcrumbLink href="/author/novels">My Novels</BreadcrumbLink>
+					</BreadcrumbItem>
+					<BreadcrumbSeparator />
+					<BreadcrumbItem>
+						<BreadcrumbLink
+							href={`/author/novels/${novel.id}`}
+							className="max-w-37.5 truncate"
+						>
+							{novel.title}
+						</BreadcrumbLink>
+					</BreadcrumbItem>
+					<BreadcrumbSeparator />
+					<BreadcrumbItem>
+						<BreadcrumbPage>Chapters</BreadcrumbPage>
+					</BreadcrumbItem>
+				</BreadcrumbList>
+			</Breadcrumb>
+
 			{/* Header */}
 			<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 				<div>
-					<div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
-						<Link
-							href={`/author/novels/${novel.id}`}
-							className="hover:text-foreground flex items-center gap-1"
-						>
-							<ArrowLeft className="h-4 w-4" />
-							{novel.title}
-						</Link>
-					</div>
 					<h1 className="text-3xl font-bold">Chapters</h1>
 					<p className="text-muted-foreground mt-1">
 						{novel.chapters.length} chapter
