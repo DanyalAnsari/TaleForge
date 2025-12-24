@@ -117,7 +117,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 	const { q = "" } = await searchParams;
 
 	return (
-		<div className="container py-8">
+		<div className="py-8">
 			<div className="space-y-8">
 				<div>
 					<h1 className="text-3xl font-bold mb-4">Search Novels</h1>

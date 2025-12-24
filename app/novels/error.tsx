@@ -17,7 +17,7 @@ export default function NovelsError({
 	}, [error]);
 
 	return (
-		<div className="container flex flex-col items-center justify-center min-h-[60vh] text-center">
+		<div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
 			<AlertTriangle className="h-16 w-16 text-destructive mb-6" />
 			<h1 className="text-2xl font-bold mb-2">Failed to load novels</h1>
 			<p className="text-muted-foreground mb-6 max-w-md">

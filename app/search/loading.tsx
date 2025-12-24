@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 
 export default function SearchLoading() {
 	return (
-		<div className="container py-8">
+		<div className="py-8">
 			<div className="space-y-8">
 				<div>
 					<Skeleton className="h-9 w-48 mb-4" />

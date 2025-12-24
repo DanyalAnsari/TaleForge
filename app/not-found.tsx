@@ -4,7 +4,7 @@ import { FileQuestion, Home, Search } from "lucide-react";
 
 export default function NotFound() {
 	return (
-		<div className="container flex flex-col items-center justify-center min-h-[60vh] text-center">
+		<div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
 			<FileQuestion className="h-20 w-20 text-muted-foreground mb-6" />
 			<h1 className="text-4xl font-bold mb-2">404</h1>
 			<h2 className="text-xl text-muted-foreground mb-6">Page Not Found</h2>
