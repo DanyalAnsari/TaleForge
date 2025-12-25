@@ -4,12 +4,13 @@ import { UserMenu } from "@/components/layout/user-menu";
 import { Button } from "@/components/ui/button";
 import { BookOpen } from "lucide-react";
 import { User } from "@/prisma/generated/prisma/client";
+import { ThemeToggle } from "./theme-toggle";
 
 export async function Navbar() {
 	const session = await getServerSession();
 
 	return (
-		<header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 flex items-center justify-center px-4 lg:px-0">
+		<header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 flex items-center justify-center px-4 lg:px-2">
 			<div className="container flex h-16 items-center justify-between">
 				<div className="flex items-center gap-12">
 					<Link href="/" className="flex items-center gap-2 font-bold text-xl">
@@ -34,6 +35,7 @@ export async function Navbar() {
 				</div>
 
 				<div className="flex items-center gap-4">
+					<ThemeToggle />
 					{session ? (
 						<UserMenu user={session.user as User} />
 					) : (
