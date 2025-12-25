@@ -119,7 +119,7 @@ export default async function NovelsPage({ searchParams }: NovelsPageProps) {
 		]);
 
 	return (
-		<div className="container py-8">
+		<div className="container mx-auto py-8">
 			<div className="flex flex-col gap-6">
 				<div>
 					<h1 className="text-3xl font-bold">Browse Novels</h1>

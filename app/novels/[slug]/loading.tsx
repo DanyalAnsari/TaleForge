@@ -4,7 +4,7 @@ import { Separator } from "@/components/ui/separator";
 
 export default function NovelDetailLoading() {
 	return (
-		<div className="container py-8">
+		<div className="w-full container mx-auto py-8">
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 				{/* Left column */}
 				<div className="lg:col-span-1 space-y-4">

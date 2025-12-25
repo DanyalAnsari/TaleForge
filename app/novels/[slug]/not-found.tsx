@@ -4,7 +4,7 @@ import { BookX, BookOpen, Search } from "lucide-react";
 
 export default function NovelNotFound() {
 	return (
-		<div className="container flex flex-col items-center justify-center min-h-[60vh] text-center">
+		<div className="w-full container flex flex-col items-center justify-center min-h-[60vh] text-center mx-auto">
 			<BookX className="h-20 w-20 text-muted-foreground mb-6" />
 			<h1 className="text-3xl font-bold mb-2">Novel Not Found</h1>
 			<p className="text-muted-foreground mb-8 max-w-md">

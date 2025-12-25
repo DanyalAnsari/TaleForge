@@ -126,7 +126,7 @@ export default async function NovelPage({ params }: NovelPageProps) {
 	};
 
 	return (
-		<div className="container py-8">
+		<div className="w-full container py-8 mx-auto">
 			{/* Breadcrumb */}
 			<Breadcrumb className="mb-6">
 				<BreadcrumbList>

@@ -19,7 +19,7 @@ export default async function AdminLayout({
 
 	if (userRole !== "ADMIN") {
 		return (
-			<div className="container py-16">
+			<div className="container mx-auto py-16">
 				<div className="max-w-md mx-auto text-center">
 					<Shield className="h-16 w-16 text-destructive mx-auto mb-4" />
 					<h1 className="text-2xl font-bold mb-2">Access Denied</h1>

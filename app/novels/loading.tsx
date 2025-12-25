@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 
 export default function NovelsLoading() {
 	return (
-		<div className="container py-8">
+		<div className="w-full container mx-auto">
 			<div className="flex flex-col gap-6">
 				{/* Header */}
 				<div>

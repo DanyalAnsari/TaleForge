@@ -109,7 +109,7 @@ export default async function ChapterPage({ params }: ChapterPageProps) {
 
 			{/* Header */}
 			<div className="sticky top-16 z-40 bg-background/95 backdrop-blur border-b">
-				<div className="container py-3">
+				<div className="container py-3 mx-auto">
 					<div className="flex items-center justify-between">
 						<Breadcrumb>
 							<BreadcrumbList>
@@ -164,14 +164,6 @@ export default async function ChapterPage({ params }: ChapterPageProps) {
 
 				<Separator className="my-8" />
 
-				<ChapterNavigation
-					novelSlug={novel.slug}
-					currentChapter={chapter.chapterNumber}
-					totalChapters={totalChapters}
-					prevChapter={prevChapter}
-					nextChapter={nextChapter}
-				/>
-
 				{/* Comments Section */}
 				<div className="mt-12">
 					<CommentsSection chapterId={chapter.id} />
@@ -180,7 +172,7 @@ export default async function ChapterPage({ params }: ChapterPageProps) {
 
 			{/* Bottom navigation (mobile friendly) */}
 			<div className="sticky bottom-0 bg-background/95 backdrop-blur border-t py-4">
-				<div className="container">
+				<div className="w-full container mx-auto">
 					<ChapterNavigation
 						novelSlug={novel.slug}
 						currentChapter={chapter.chapterNumber}

@@ -6,7 +6,7 @@ export default function ChapterLoading() {
 		<div className="min-h-screen">
 			{/* Header */}
 			<div className="sticky top-16 z-40 bg-background/95 backdrop-blur border-b">
-				<div className="container py-3">
+				<div className="w-full container mx-auto py-3">
 					<div className="flex items-center justify-between">
 						<div className="flex items-center gap-2">
 							<Skeleton className="h-8 w-32" />
