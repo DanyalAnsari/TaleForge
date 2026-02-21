@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Lora, Playfair, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/navbar";
 import { constructMetadata } from "@/lib/metadata";
@@ -7,13 +7,18 @@ import { Toaster } from "@/components/ui/sonner";
 import { Footer } from "@/components/layout/footer";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 
-const geistSans = Geist({
-	variable: "--font-geist-sans",
+const loraSans = Lora({
+	variable: "--font-lora",
 	subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-	variable: "--font-geist-mono",
+const playfair = Playfair({
+	variable: "--font-playfair",
+	subsets: ["latin"],
+});
+
+const jetbrainsMono = JetBrains_Mono({
+	variable: "--font-jetbrains",
 	subsets: ["latin"],
 });
 
@@ -37,7 +42,8 @@ export default function RootLayout({
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<body
-				className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
+				className={`${loraSans.variable} ${playfair.variable}
+				 ${jetbrainsMono.variable}  font-sans antialiased`}
 			>
 				<ThemeProvider
 					attribute="class"
