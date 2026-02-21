@@ -1,5 +1,3 @@
-// components/reader/chapter-navigation.tsx
-
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, List } from "lucide-react";
