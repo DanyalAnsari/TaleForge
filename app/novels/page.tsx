@@ -9,11 +9,11 @@ import { Metadata } from "next";
 import { getServerSession } from "@/lib/auth-server";
 
 export const metadata: Metadata = {
-	title: "Browse Novels | WebNovel",
+	title: "Browse Novels | TaleForge",
 	description:
 		"Explore our collection of web novels. Filter by genre, status, and tags to find your perfect read.",
 	openGraph: {
-		title: "Browse Novels | WebNovel",
+		title: "Browse Novels | TaleForge",
 		description:
 			"Explore our collection of web novels. Filter by genre, status, and tags to find your perfect read.",
 	},

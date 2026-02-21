@@ -42,7 +42,7 @@ export function Footer() {
 							className="flex items-center gap-2 font-bold text-xl"
 						>
 							<BookOpen className="h-6 w-6" />
-							<span>WebNovel</span>
+							<span>TaleForge</span>
 						</Link>
 						<p className="text-sm text-muted-foreground mt-4">
 							Discover stories, share your imagination, and connect with readers
@@ -140,7 +140,7 @@ export function Footer() {
 				{/* Bottom Bar */}
 				<div className="border-t mt-8 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
 					<p className="text-sm text-muted-foreground">
-						© {currentYear} WebNovel. All rights reserved.
+						© {currentYear} TaleForge. All rights reserved.
 					</p>
 					<p className="text-sm text-muted-foreground">
 						Made with ❤️ for readers and writers

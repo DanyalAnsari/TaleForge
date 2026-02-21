@@ -101,7 +101,7 @@ export async function generateMetadata({ params }: NovelPageProps) {
 	}
 
 	return {
-		title: `${novel.title} - WebNovel`,
+		title: `${novel.title} - TaleForge`,
 		description: novel.description,
 	};
 }

@@ -15,7 +15,7 @@ export async function Navbar() {
 				<div className="flex items-center gap-12">
 					<Link href="/" className="flex items-center gap-2 font-bold text-xl">
 						<BookOpen className="h-6 w-6" />
-						<span>WebNovel</span>
+						<span>TaleForge</span>
 					</Link>
 
 					<nav className="hidden md:flex items-center gap-6">

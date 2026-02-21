@@ -9,7 +9,7 @@ import { Search, BookOpen } from "lucide-react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-	title: "Search Novels | WebNovel",
+	title: "Search Novels | TaleForge",
 	description: "Search for novels by title, author, or tags.",
 };
 

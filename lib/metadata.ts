@@ -3,12 +3,12 @@
 import { Metadata } from "next";
 
 const siteConfig = {
-	name: "WebNovel",
+	name: "TaleForge",
 	description:
-		"Discover and read thousands of web novels. From fantasy epics to slice-of-life stories, find your next adventure on WebNovel.",
+		"Discover and read thousands of web novels. From fantasy epics to slice-of-life stories, find your next adventure on TaleForge.",
 	url: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
 	ogImage: "/og-image.jpg",
-	creator: "WebNovel Team",
+	creator: "TaleForge Team",
 };
 
 export function constructMetadata({

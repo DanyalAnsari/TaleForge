@@ -72,7 +72,7 @@ export async function generateMetadata({ params }: ChapterPageProps) {
 	}
 
 	return {
-		title: `${data.chapter.title} - ${data.novel.title} - WebNovel`,
+		title: `${data.chapter.title} - ${data.novel.title} - TaleForge`,
 		description: `Read Chapter ${data.chapter.chapterNumber}: ${data.chapter.title} of ${data.novel.title}`,
 	};
 }

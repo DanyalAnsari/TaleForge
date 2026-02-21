@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Lora, Playfair, JetBrains_Mono } from "next/font/google";
+import { Lora, Playfair_Display, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/navbar";
 import { constructMetadata } from "@/lib/metadata";
@@ -12,7 +12,7 @@ const loraSans = Lora({
 	subsets: ["latin"],
 });
 
-const playfair = Playfair({
+const playfair = Playfair_Display({
 	variable: "--font-playfair",
 	subsets: ["latin"],
 });
