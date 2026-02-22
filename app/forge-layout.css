@@ -1,0 +1,594 @@
+/* ─────────────────────────────────────────────────────────────
+   TALEFORGE — Layout Design System Tokens & Utilities
+   Import after globals.css:
+     @import "./forge-layout.css";
+   
+   All class names are namespaced with forge-* or reader-*
+   to avoid collisions.
+───────────────────────────────────────────────────────────── */
+
+/* ════════════════════════════════════════════════════════════
+   LAYOUT TOKENS
+════════════════════════════════════════════════════════════ */
+:root {
+	/* ── Spacing scale (8px base) ────────────────────────── */
+	--space-0: 0rem;
+	--space-1: 0.25rem; /* 4px */
+	--space-2: 0.5rem; /* 8px */
+	--space-3: 0.75rem; /* 12px */
+	--space-4: 1rem; /* 16px */
+	--space-5: 1.5rem; /* 24px */
+	--space-6: 2rem; /* 32px — 1 baseline rhythm unit */
+	--space-8: 3rem; /* 48px */
+	--space-10: 4rem; /* 64px */
+	--space-12: 6rem; /* 96px */
+	--space-16: 8rem; /* 128px */
+
+	/* ── Width tokens ────────────────────────────────────── */
+	--width-prose: 65ch;
+	--width-prose-wide: 75ch;
+	--width-content: 72rem; /* 1152px */
+	--width-narrow: 42rem; /* 672px */
+	--width-full: 90rem; /* 1440px */
+	--width-sidebar: 16rem; /* 256px */
+	--width-sidebar-expanded: 20rem; /* 320px */
+
+	/* ── Depth / Shadow system ───────────────────────────── */
+	--forge-shadow-page:
+		0 1px 3px oklch(0.3 0.02 72 / 8%), 0 1px 2px oklch(0.3 0.02 72 / 5%);
+	--forge-shadow-raised:
+		0 4px 12px oklch(0.3 0.02 72 / 10%), 0 2px 4px oklch(0.3 0.02 72 / 6%);
+	--forge-shadow-floating:
+		0 12px 40px oklch(0.2 0.02 72 / 15%), 0 4px 12px oklch(0.2 0.02 72 / 8%);
+	--forge-shadow-overlay:
+		0 24px 80px oklch(0.1 0.02 72 / 25%), 0 8px 24px oklch(0.1 0.02 72 / 12%);
+
+	/* ── Motion ──────────────────────────────────────────── */
+	--ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+	--ease-in: cubic-bezier(0.4, 0, 1, 1);
+	--ease-out: cubic-bezier(0, 0, 0.2, 1);
+	--ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+	--duration-fast: 100ms;
+	--duration-normal: 200ms;
+	--duration-medium: 300ms;
+	--duration-slow: 500ms;
+
+	/* ── Z-index scale ───────────────────────────────────── */
+	--z-base: 0;
+	--z-sticky: 10;
+	--z-dropdown: 20;
+	--z-sidebar: 30;
+	--z-modal: 40;
+	--z-toast: 50;
+	--z-command: 60;
+	--z-max: 100;
+
+	/* ── Icon sizing ─────────────────────────────────────── */
+	--icon-sm: 1rem; /* 16px */
+	--icon-md: 1.25rem; /* 20px */
+	--icon-lg: 1.5rem; /* 24px */
+	--icon-xl: 2rem; /* 32px */
+}
+
+/* ── Dark mode shadow overrides ──────────────────────────── */
+.dark {
+	--forge-shadow-page:
+		0 1px 3px oklch(0 0 0 / 30%), 0 1px 2px oklch(0 0 0 / 20%);
+	--forge-shadow-raised:
+		0 4px 12px oklch(0 0 0 / 35%), 0 2px 4px oklch(0 0 0 / 25%),
+		inset 0 1px 0 oklch(1 0 0 / 4%);
+	--forge-shadow-floating:
+		0 12px 40px oklch(0 0 0 / 50%), 0 4px 12px oklch(0 0 0 / 30%),
+		inset 0 1px 0 oklch(1 0 0 / 5%);
+	--forge-shadow-overlay:
+		0 24px 80px oklch(0 0 0 / 60%), 0 8px 24px oklch(0 0 0 / 35%);
+}
+
+/* ════════════════════════════════════════════════════════════
+   SURFACE ELEVATION UTILITIES
+   Use these to apply consistent depth to components
+════════════════════════════════════════════════════════════ */
+@layer utilities {
+	/* ── Elevation levels ────────────────────────────────── */
+	.forge-elevation-0 {
+		box-shadow: none;
+	}
+
+	.forge-elevation-1 {
+		box-shadow: var(--forge-shadow-page);
+	}
+
+	.forge-elevation-2 {
+		box-shadow: var(--forge-shadow-raised);
+	}
+
+	.forge-elevation-3 {
+		box-shadow: var(--forge-shadow-floating);
+	}
+
+	.forge-elevation-4 {
+		box-shadow: var(--forge-shadow-overlay);
+	}
+
+	/* ── Prose container — reading-optimized width ───────── */
+	.forge-prose-container {
+		max-width: var(--width-prose);
+		margin-left: auto;
+		margin-right: auto;
+		padding-left: var(--space-4);
+		padding-right: var(--space-4);
+	}
+
+	.forge-prose-container-wide {
+		max-width: var(--width-prose-wide);
+		margin-left: auto;
+		margin-right: auto;
+		padding-left: var(--space-4);
+		padding-right: var(--space-4);
+	}
+
+	/* ── Content container — platform pages ──────────────── */
+	.forge-content-container {
+		max-width: var(--width-content);
+		margin-left: auto;
+		margin-right: auto;
+		padding-left: var(--space-4);
+		padding-right: var(--space-4);
+	}
+
+	.forge-narrow-container {
+		max-width: var(--width-narrow);
+		margin-left: auto;
+		margin-right: auto;
+		padding-left: var(--space-4);
+		padding-right: var(--space-4);
+	}
+
+	/* ── Section spacing — vertical rhythm ───────────────── */
+	.forge-section {
+		padding-top: var(--space-8);
+		padding-bottom: var(--space-8);
+	}
+
+	.forge-section-lg {
+		padding-top: var(--space-10);
+		padding-bottom: var(--space-10);
+	}
+
+	.forge-section-hero {
+		padding-top: var(--space-12);
+		padding-bottom: var(--space-12);
+	}
+
+	/* ── Card layout surface ─────────────────────────────── */
+	.forge-card {
+		background-color: var(--card);
+		color: var(--card-foreground);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-xl);
+		box-shadow: var(--forge-shadow-page);
+		transition:
+			box-shadow var(--duration-normal) var(--ease-default),
+			transform var(--duration-normal) var(--ease-default);
+	}
+
+	.forge-card:hover {
+		box-shadow: var(--forge-shadow-raised);
+		transform: translateY(-2px);
+	}
+
+	/* ── Card without hover transform (for static info cards) */
+	.forge-card-static {
+		background-color: var(--card);
+		color: var(--card-foreground);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-xl);
+		box-shadow: var(--forge-shadow-page);
+	}
+
+	/* ── Novel cover placeholder gradient ────────────────── */
+	.forge-cover-placeholder {
+		background: linear-gradient(
+			145deg,
+			var(--forge-navy) 0%,
+			oklch(from var(--forge-navy) calc(l + 0.12) calc(c - 0.01) calc(h + 10))
+				50%,
+			oklch(from var(--forge-gold) l c h / 30%) 100%
+		);
+	}
+
+	/* ── Reading room — the immersive reader wrapper ─────── */
+	.forge-reading-room {
+		min-height: 100dvh;
+		background-color: var(--background);
+		transition: background-color var(--duration-medium) var(--ease-default);
+	}
+
+	/* ── Reader header — auto-hiding sticky ──────────────── */
+	.forge-reader-header {
+		position: sticky;
+		top: 0;
+		z-index: var(--z-sticky);
+		background-color: oklch(from var(--background) l c h / 90%);
+		backdrop-filter: blur(12px);
+		-webkit-backdrop-filter: blur(12px);
+		border-bottom: 1px solid var(--border);
+		transition: transform var(--duration-medium) var(--ease-out);
+	}
+
+	.forge-reader-header--hidden {
+		transform: translateY(-100%);
+	}
+
+	/* ── Reader progress bar — fixed bottom ──────────────── */
+	.forge-reader-progress-bar {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		z-index: var(--z-sticky);
+		height: 3px;
+		background: var(--muted);
+	}
+
+	.forge-reader-progress-fill {
+		height: 100%;
+		border-radius: 0 999px 999px 0;
+		transition: width var(--duration-fast) linear;
+	}
+
+	/* ── Chapter navigation (prev/next) ──────────────────── */
+	.forge-chapter-nav {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: var(--space-5) 0;
+		border-top: 1px solid var(--border);
+		margin-top: var(--space-8);
+	}
+
+	/* ── Stat card (dashboard) ───────────────────────────── */
+	.forge-stat-card {
+		background-color: var(--card);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-xl);
+		box-shadow: var(--forge-shadow-page);
+		padding: var(--space-5);
+	}
+
+	.forge-stat-value {
+		font-family: var(--font-serif), "Georgia", serif;
+		font-size: 2rem;
+		font-weight: 700;
+		line-height: 1.1;
+		color: var(--foreground);
+	}
+
+	.forge-stat-label {
+		font-family: var(--font-mono), monospace;
+		font-size: 0.7rem;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--muted-foreground);
+		margin-top: var(--space-1);
+	}
+
+	/* ── Chapter list item ───────────────────────────────── */
+	.forge-chapter-item {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: var(--space-4) var(--space-5);
+		border-bottom: 1px solid var(--border);
+		transition: background-color var(--duration-fast) var(--ease-default);
+	}
+
+	.forge-chapter-item:hover {
+		background-color: oklch(from var(--accent) l c h / 40%);
+	}
+
+	.forge-chapter-item:last-child {
+		border-bottom: none;
+	}
+
+	.forge-chapter-number {
+		font-family: var(--font-mono), monospace;
+		font-size: 0.8rem;
+		color: var(--forge-gold);
+		min-width: 3.5em;
+		letter-spacing: 0.04em;
+	}
+
+	.forge-chapter-title {
+		font-family: var(--font-serif), "Georgia", serif;
+		font-weight: 500;
+		font-size: 1.05rem;
+		color: var(--foreground);
+	}
+
+	.forge-chapter-meta {
+		font-family: var(--font-mono), monospace;
+		font-size: 0.72rem;
+		color: var(--muted-foreground);
+		letter-spacing: 0.03em;
+	}
+
+	/* ── Sidebar nav item ────────────────────────────────── */
+	.forge-sidebar-item {
+		display: flex;
+		align-items: center;
+		gap: var(--space-3);
+		padding: var(--space-2) var(--space-3);
+		border-radius: var(--radius-md);
+		font-size: 0.9rem;
+		color: var(--sidebar-foreground);
+		transition:
+			background-color var(--duration-fast) var(--ease-default),
+			color var(--duration-fast) var(--ease-default);
+	}
+
+	.forge-sidebar-item:hover {
+		background-color: var(--sidebar-accent);
+		color: var(--sidebar-accent-foreground);
+	}
+
+	.forge-sidebar-item--active {
+		background-color: var(--sidebar-accent);
+		color: var(--forge-gold);
+		font-weight: 600;
+	}
+
+	/* ── Popover / Dropdown surface ──────────────────────── */
+	.forge-popover {
+		background-color: var(--popover);
+		color: var(--popover-foreground);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-xl);
+		box-shadow: var(--forge-shadow-floating);
+	}
+
+	/* ── Modal overlay ───────────────────────────────────── */
+	.forge-modal-overlay {
+		position: fixed;
+		inset: 0;
+		z-index: var(--z-modal);
+		background-color: oklch(0 0 0 / 50%);
+		backdrop-filter: blur(4px);
+		-webkit-backdrop-filter: blur(4px);
+	}
+
+	.dark .forge-modal-overlay {
+		background-color: oklch(0 0 0 / 65%);
+	}
+
+	.forge-modal-content {
+		background-color: var(--card);
+		color: var(--card-foreground);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-2xl);
+		box-shadow: var(--forge-shadow-overlay);
+	}
+
+	/* ── Toast notification ──────────────────────────────── */
+	.forge-toast {
+		background-color: var(--card);
+		color: var(--card-foreground);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-lg);
+		box-shadow: var(--forge-shadow-floating);
+		font-size: 0.875rem;
+	}
+
+	/* ── Decorative flourish (under hero headings) ───────── */
+	.forge-flourish {
+		display: block;
+		width: 120px;
+		height: 20px;
+		margin: var(--space-3) auto var(--space-6);
+		opacity: 0.35;
+		color: var(--forge-gold);
+	}
+
+	/* ── Empty state illustration area ───────────────────── */
+	.forge-empty-state {
+		text-align: center;
+		padding: var(--space-12) var(--space-4);
+		color: var(--muted-foreground);
+	}
+
+	.forge-empty-state-icon {
+		width: var(--icon-xl);
+		height: var(--icon-xl);
+		margin: 0 auto var(--space-4);
+		color: oklch(from var(--forge-gold) l c h / 40%);
+	}
+
+	.forge-empty-state-title {
+		font-family: var(--font-serif), "Georgia", serif;
+		font-size: 1.25rem;
+		font-weight: 600;
+		color: var(--foreground);
+		margin-bottom: var(--space-2);
+	}
+
+	.forge-empty-state-description {
+		font-size: 0.9rem;
+		max-width: 40ch;
+		margin: 0 auto;
+		line-height: 1.6;
+	}
+
+	/* ── Input field — forge-styled ──────────────────────── */
+	.forge-input {
+		background-color: var(--input);
+		color: var(--foreground);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-md);
+		font-family: var(--font-sans), "Georgia", serif;
+		font-size: 0.9rem;
+		transition:
+			border-color var(--duration-normal) var(--ease-default),
+			box-shadow var(--duration-normal) var(--ease-default);
+	}
+
+	.forge-input:focus {
+		border-color: var(--forge-gold);
+		box-shadow: 0 0 0 3px oklch(from var(--forge-gold) l c h / 20%);
+		outline: none;
+	}
+
+	.forge-input::placeholder {
+		color: var(--muted-foreground);
+		opacity: 0.7;
+	}
+
+	/* ── Textarea — for writing/editing ──────────────────── */
+	.forge-textarea {
+		background-color: var(--input);
+		color: var(--foreground);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-lg);
+		font-family: var(--font-sans), "Georgia", serif;
+		font-size: 1rem;
+		line-height: 1.7;
+		resize: vertical;
+		transition:
+			border-color var(--duration-normal) var(--ease-default),
+			box-shadow var(--duration-normal) var(--ease-default);
+	}
+
+	.forge-textarea:focus {
+		border-color: var(--forge-gold);
+		box-shadow: 0 0 0 3px oklch(from var(--forge-gold) l c h / 20%);
+		outline: none;
+	}
+
+	/* ── Tabs — for novel detail pages ───────────────────── */
+	.forge-tab {
+		font-family: var(--font-mono), monospace;
+		font-size: 0.78rem;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--muted-foreground);
+		border-bottom: 2px solid transparent;
+		padding-bottom: var(--space-2);
+		transition:
+			color var(--duration-fast) var(--ease-default),
+			border-color var(--duration-fast) var(--ease-default);
+	}
+
+	.forge-tab:hover {
+		color: var(--foreground);
+	}
+
+	.forge-tab--active {
+		color: var(--forge-gold);
+		border-bottom-color: var(--forge-gold);
+		font-weight: 600;
+	}
+
+	/* ── Breadcrumb ──────────────────────────────────────── */
+	.forge-breadcrumb {
+		font-family: var(--font-mono), monospace;
+		font-size: 0.72rem;
+		letter-spacing: 0.04em;
+		color: var(--muted-foreground);
+	}
+
+	.forge-breadcrumb-separator {
+		color: oklch(from var(--forge-gold) l c h / 40%);
+		margin: 0 var(--space-2);
+	}
+
+	.forge-breadcrumb-current {
+		color: var(--foreground);
+		font-weight: 500;
+	}
+
+	/* ── Skeleton loading — parchment shimmer ────────────── */
+	.forge-skeleton {
+		background: linear-gradient(
+			90deg,
+			var(--muted) 25%,
+			oklch(from var(--muted) calc(l + 0.04) c h) 50%,
+			var(--muted) 75%
+		);
+		background-size: 200% 100%;
+		animation: forge-skeleton-shimmer 1.8s var(--ease-default) infinite;
+		border-radius: var(--radius-md);
+	}
+
+	@keyframes forge-skeleton-shimmer {
+		0% {
+			background-position: 200% 0;
+		}
+		100% {
+			background-position: -200% 0;
+		}
+	}
+
+	/* ── Accessible focus ring — gold ────────────────────── */
+	.forge-focus-ring:focus-visible {
+		outline: 2px solid var(--forge-gold);
+		outline-offset: 2px;
+	}
+}
+
+/* ════════════════════════════════════════════════════════════
+   REDUCED MOTION
+   Respect user preference — disable transforms and animations
+════════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+
+	.forge-card:hover,
+	.forge-card-glow:hover,
+	.forge-btn-primary:hover {
+		transform: none !important;
+	}
+}
+
+/* ════════════════════════════════════════════════════════════
+   PRINT STYLES — for readers who want to print chapters
+════════════════════════════════════════════════════════════ */
+@media print {
+	.forge-reader-header,
+	.forge-reader-progress-bar,
+	.forge-sidebar-item,
+	.forge-btn-primary,
+	.forge-btn-ghost {
+		display: none !important;
+	}
+
+	.reader-content {
+		max-width: 100% !important;
+		padding: 0 !important;
+		font-size: 12pt !important;
+		line-height: 1.6 !important;
+		color: #000 !important;
+		background: #fff !important;
+	}
+
+	.chapter-content p:first-of-type::first-letter {
+		color: #000 !important;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4 {
+		page-break-after: avoid;
+	}
+
+	.reader-content p {
+		orphans: 3;
+		widows: 3;
+	}
+}
