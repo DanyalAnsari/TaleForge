@@ -3,10 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 import prisma from "@/lib/prisma";
 import { getServerSession } from "@/lib/auth-server";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import {
 	Breadcrumb,
 	BreadcrumbItem,
@@ -19,15 +15,7 @@ import { ChapterList } from "@/components/novels/chapter-list";
 import { AddToLibraryButton } from "@/components/novels/add-to-library-button";
 import { ReviewsSection } from "@/components/reviews/reviews-section";
 import { formatNumber, formatDate } from "@/lib/utils";
-import {
-	BookOpen,
-	Eye,
-	Calendar,
-	User,
-	Clock,
-	PlayCircle,
-	Star,
-} from "lucide-react";
+import { BookOpen, PlayCircle, Star } from "lucide-react";
 
 interface NovelPageProps {
 	params: Promise<{ slug: string }>;
@@ -106,6 +94,23 @@ export async function generateMetadata({ params }: NovelPageProps) {
 	};
 }
 
+function StarRating({ rating, max = 5 }: { rating: number; max?: number }) {
+	return (
+		<span className="inline-flex items-center gap-0.5">
+			{Array.from({ length: max }).map((_, i) => (
+				<Star
+					key={i}
+					className={`h-3.5 w-3.5 ${
+						i < Math.round(rating)
+							? "forge-star-filled"
+							: "forge-star-empty"
+					}`}
+				/>
+			))}
+		</span>
+	);
+}
+
 export default async function NovelPage({ params }: NovelPageProps) {
 	const { slug } = await params;
 	const [novel, session] = await Promise.all([
@@ -119,16 +124,26 @@ export default async function NovelPage({ params }: NovelPageProps) {
 
 	const isInLibrary = await getLibraryStatus(novel.id, session?.user?.id);
 	const firstChapter = novel.chapters[0];
-	const statusColors = {
-		ONGOING: "bg-green-500/10 text-green-500 border-green-500/20",
-		COMPLETED: "bg-blue-500/10 text-blue-500 border-blue-500/20",
-		HIATUS: "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",
+
+	const statusClass: Record<string, string> = {
+		ONGOING: "forge-status-ongoing",
+		COMPLETED: "forge-status-completed",
+		HIATUS: "forge-status-hiatus",
 	};
 
+	const infoRows = [
+		{ label: "Author", value: novel.author.name },
+		{ label: "Status", value: novel.status.charAt(0) + novel.status.slice(1).toLowerCase() },
+		{ label: "Chapters", value: novel.chapters.length.toString() },
+		{ label: "Views", value: formatNumber(novel.views) },
+		{ label: "Published", value: formatDate(novel.createdAt) },
+		{ label: "Updated", value: formatDate(novel.updatedAt) },
+	];
+
 	return (
-		<div className="w-full container py-8 mx-auto">
+		<div className="forge-content-container forge-section">
 			{/* Breadcrumb */}
-			<Breadcrumb className="mb-6">
+			<Breadcrumb className="mb-8">
 				<BreadcrumbList>
 					<BreadcrumbItem>
 						<BreadcrumbLink href="/">Home</BreadcrumbLink>
@@ -146,150 +161,153 @@ export default async function NovelPage({ params }: NovelPageProps) {
 				</BreadcrumbList>
 			</Breadcrumb>
 
-			<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-				{/* Left column - Cover and info */}
-				<div className="lg:col-span-1 space-y-4">
-					<div className="relative aspect-2/3 rounded-lg overflow-hidden shadow-lg">
+			{/* 2-column layout */}
+			<div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-8 lg:gap-12">
+				{/* Left column — Cover and info */}
+				<div className="lg:sticky lg:top-20 lg:self-start space-y-4">
+					{/* Cover image */}
+					<div className="forge-card overflow-hidden aspect-[3/4] mb-4">
 						{novel.coverImageUrl ? (
 							<Image
 								src={novel.coverImageUrl}
 								alt={novel.title}
 								fill
-								className="object-cover"
+								className="object-cover w-full h-full"
 								priority
-								sizes="(max-width: 1024px) 100vw, 33vw"
+								sizes="(max-width: 1024px) 100vw, 280px"
 							/>
 						) : (
-							<div className="w-full h-full bg-muted flex items-center justify-center">
-								<BookOpen className="h-20 w-20 text-muted-foreground" />
+							<div className="forge-cover-placeholder w-full h-full flex items-center justify-center">
+								<BookOpen className="h-16 w-16 text-forge-gold opacity-50" />
 							</div>
 						)}
 					</div>
 
-					{firstChapter && (
-						<Button asChild className="w-full" size="lg">
-							<Link href={`/novels/${novel.slug}/chapter/1`}>
+					{/* CTA buttons */}
+					<div className="flex flex-col gap-3">
+						{firstChapter && (
+							<Link
+								href={`/novels/${novel.slug}/chapter/1`}
+								className="forge-btn-primary forge-focus-ring w-full py-3 rounded-lg text-sm inline-flex items-center justify-center transition-colors duration-[var(--duration-fast)]"
+							>
 								<PlayCircle className="mr-2 h-5 w-5" />
 								Start Reading
 							</Link>
-						</Button>
-					)}
+						)}
 
-					<AddToLibraryButton
-						novelId={novel.id}
-						isInLibrary={isInLibrary}
-						isLoggedIn={!!session}
-					/>
+						<AddToLibraryButton
+							novelId={novel.id}
+							isInLibrary={isInLibrary}
+							isLoggedIn={!!session}
+						/>
+					</div>
 
-					<Card>
-						<CardContent className="pt-6 space-y-4">
-							{novel._count.reviews > 0 && (
-								<div className="flex items-center gap-2">
-									<Star className="h-4 w-4 text-yellow-400 fill-yellow-400" />
-									<span className="font-medium">
+					{/* Info card */}
+					<div className="forge-card-static p-5 mt-4">
+						{/* Rating row */}
+						{novel._count.reviews > 0 && (
+							<div className="flex justify-between items-center py-2 border-b border-[var(--border)]">
+								<span className="font-mono text-[0.7rem] uppercase tracking-wider text-muted-foreground">
+									Rating
+								</span>
+								<span className="flex items-center gap-2">
+									<StarRating rating={novel.averageRating} />
+									<span className="font-sans text-sm font-medium">
 										{novel.averageRating.toFixed(1)}
 									</span>
-									<span className="text-sm text-muted-foreground">
-										({novel._count.reviews} reviews)
-									</span>
-								</div>
-							)}
-							<div className="flex items-center gap-2">
-								<User className="h-4 w-4 text-muted-foreground" />
-								<span className="text-sm">
-									Author:{" "}
-									<span className="font-medium">{novel.author.name}</span>
-								</span>
-							</div>
-							<div className="flex items-center gap-2">
-								<Eye className="h-4 w-4 text-muted-foreground" />
-								<span className="text-sm">
-									Views:{" "}
-									<span className="font-medium">
-										{formatNumber(novel.views)}
+									<span className="font-mono text-[0.65rem] text-muted-foreground">
+										({novel._count.reviews})
 									</span>
 								</span>
 							</div>
-							<div className="flex items-center gap-2">
-								<BookOpen className="h-4 w-4 text-muted-foreground" />
-								<span className="text-sm">
-									Chapters:{" "}
-									<span className="font-medium">{novel.chapters.length}</span>
+						)}
+
+						{/* Info rows */}
+						{infoRows.map((row, i) => (
+							<div
+								key={row.label}
+								className={`flex justify-between items-center py-2 ${
+									i < infoRows.length - 1
+										? "border-b border-[var(--border)]"
+										: ""
+								}`}
+							>
+								<span className="font-mono text-[0.7rem] uppercase tracking-wider text-muted-foreground">
+									{row.label}
+								</span>
+								<span className="font-sans text-sm font-medium">
+									{row.value}
 								</span>
 							</div>
-							<div className="flex items-center gap-2">
-								<Calendar className="h-4 w-4 text-muted-foreground" />
-								<span className="text-sm">
-									Published:{" "}
-									<span className="font-medium">
-										{formatDate(novel.createdAt)}
-									</span>
-								</span>
-							</div>
-							<div className="flex items-center gap-2">
-								<Clock className="h-4 w-4 text-muted-foreground" />
-								<span className="text-sm">
-									Updated:{" "}
-									<span className="font-medium">
-										{formatDate(novel.updatedAt)}
-									</span>
-								</span>
-							</div>
-						</CardContent>
-					</Card>
+						))}
+					</div>
 				</div>
 
-				{/* Right column - Details, chapters, and reviews */}
-				<div className="lg:col-span-2 space-y-6">
-					<div>
-						<div className="flex items-start justify-between gap-4">
-							<h1 className="text-3xl font-bold">{novel.title}</h1>
-							<Badge
-								variant="outline"
-								className={
-									statusColors[novel.status as keyof typeof statusColors]
-								}
-							>
-								{novel.status}
-							</Badge>
-						</div>
+				{/* Right column — Details, chapters, reviews */}
+				<div>
+					{/* Title */}
+					<h1 className="font-serif text-3xl lg:text-4xl font-bold leading-tight mb-2">
+						{novel.title}
+					</h1>
 
-						<div className="flex flex-wrap gap-2 mt-4">
-							{novel.tags.map(({ tag }) => (
-								<Link key={tag.slug} href={`/novels?tag=${tag.slug}`}>
-									<Badge variant="secondary" className="hover:bg-secondary/80">
-										{tag.name}
-									</Badge>
-								</Link>
-							))}
+					{/* Status badge */}
+					<span
+						className={`${
+							statusClass[novel.status as keyof typeof statusClass] ??
+							"forge-status-ongoing"
+						} px-3 py-1 inline-block mb-3`}
+					>
+						{novel.status.charAt(0) + novel.status.slice(1).toLowerCase()}
+					</span>
+
+					{/* Tags */}
+					<div className="flex flex-wrap gap-2 mb-6">
+						{novel.tags.map(({ tag }) => (
+							<Link
+								key={tag.slug}
+								href={`/novels?tag=${tag.slug}`}
+								className="forge-badge-genre cursor-pointer hover:opacity-80 forge-focus-ring transition-colors duration-[var(--duration-fast)]"
+							>
+								{tag.name}
+							</Link>
+						))}
+					</div>
+
+					<div className="forge-divider my-6" aria-hidden="true" />
+
+					{/* Synopsis card */}
+					<div className="forge-card-static p-6 mb-6">
+						<h2 className="font-mono text-xs uppercase tracking-widest text-forge-gold mb-3">
+							Synopsis
+						</h2>
+						<p className="text-sm leading-relaxed text-muted-foreground whitespace-pre-line">
+							{novel.description}
+						</p>
+					</div>
+
+					{/* Chapters card */}
+					<div className="forge-card-static overflow-hidden mb-6">
+						<div className="px-6 py-4 border-b border-[var(--border)] flex justify-between items-center">
+							<h2 className="font-mono text-xs uppercase tracking-widest text-forge-gold">
+								Chapters
+							</h2>
+							<span className="font-mono text-[0.7rem] text-muted-foreground">
+								{novel.chapters.length} chapters
+							</span>
+						</div>
+						<div>
+							<ChapterList
+								chapters={novel.chapters}
+								novelSlug={novel.slug}
+							/>
 						</div>
 					</div>
 
-					<Card>
-						<CardHeader>
-							<CardTitle>Synopsis</CardTitle>
-						</CardHeader>
-						<CardContent>
-							<p className="text-muted-foreground whitespace-pre-line leading-relaxed">
-								{novel.description}
-							</p>
-						</CardContent>
-					</Card>
-
-					<Card>
-						<CardHeader className="flex flex-row items-center justify-between">
-							<CardTitle>Chapters</CardTitle>
-							<span className="text-sm text-muted-foreground">
-								{novel.chapters.length} chapters
-							</span>
-						</CardHeader>
-						<Separator />
-						<CardContent className="pt-4">
-							<ChapterList chapters={novel.chapters} novelSlug={novel.slug} />
-						</CardContent>
-					</Card>
-
-					<ReviewsSection novelId={novel.id} authorId={novel.author.id} />
+					{/* Reviews */}
+					<ReviewsSection
+						novelId={novel.id}
+						authorId={novel.author.id}
+					/>
 				</div>
 			</div>
 		</div>

@@ -94,7 +94,7 @@ function NovelGridSkeleton() {
 		<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
 			{Array.from({ length: 10 }).map((_, i) => (
 				<div key={i} className="space-y-3">
-					<Skeleton className="aspect-2/3 rounded-lg" />
+					<Skeleton className="aspect-[3/4] rounded-lg" />
 					<Skeleton className="h-4 w-3/4" />
 					<Skeleton className="h-3 w-1/2" />
 				</div>
@@ -119,63 +119,72 @@ export default async function NovelsPage({ searchParams }: NovelsPageProps) {
 		]);
 
 	return (
-		<div className="container mx-auto py-8">
-			<div className="flex flex-col gap-6">
-				<div>
-					<h1 className="text-3xl font-bold">Browse Novels</h1>
-					<p className="text-muted-foreground mt-1">
-						Discover {total} stories from our community
-					</p>
-				</div>
+		<div className="forge-content-container forge-section">
+			{/* Page header */}
+			<div className="mb-8">
+				<h1 className="font-serif text-3xl font-bold mb-1">
+					Browse Novels
+				</h1>
+				<span className="forge-divider w-24 my-3" aria-hidden="true" />
+				<p className="font-mono text-xs text-muted-foreground tracking-wide">
+					Discover {total.toLocaleString()} stories from our community
+				</p>
+			</div>
 
-				{/* Filters */}
-				<div className="flex flex-wrap gap-2">
+			{/* Status filter pills */}
+			<div className="flex gap-2 flex-wrap mb-4">
+				<Link
+					href="/novels"
+					className={`font-mono text-xs uppercase tracking-wider rounded-full px-4 py-1 transition-colors duration-[var(--duration-fast)] forge-focus-ring ${
+						!status && !tag
+							? "bg-[var(--forge-gold)] text-[oklch(0.10_0.02_260)] font-semibold"
+							: "text-muted-foreground hover:text-foreground border border-[var(--border)]"
+					}`}
+				>
+					All
+				</Link>
+				{["ONGOING", "COMPLETED", "HIATUS"].map((s) => (
 					<Link
-						href="/novels"
-						className={`px-3 py-1 rounded-full text-sm transition-colors ${
-							!status && !tag
-								? "bg-primary text-primary-foreground"
-								: "bg-muted hover:bg-muted/80"
+						key={s}
+						href={`/novels?status=${s}`}
+						className={`font-mono text-xs uppercase tracking-wider rounded-full px-4 py-1 transition-colors duration-[var(--duration-fast)] forge-focus-ring ${
+							status === s
+								? "bg-[var(--forge-gold)] text-[oklch(0.10_0.02_260)] font-semibold"
+								: "text-muted-foreground hover:text-foreground border border-[var(--border)]"
 						}`}
 					>
-						All
+						{s.charAt(0) + s.slice(1).toLowerCase()}
 					</Link>
-					{["ONGOING", "COMPLETED", "HIATUS"].map((s) => (
-						<Link
-							key={s}
-							href={`/novels?status=${s}`}
-							className={`px-3 py-1 rounded-full text-sm transition-colors ${
-								status === s
-									? "bg-primary text-primary-foreground"
-									: "bg-muted hover:bg-muted/80"
-							}`}
-						>
-							{s.charAt(0) + s.slice(1).toLowerCase()}
-						</Link>
-					))}
-				</div>
+				))}
+			</div>
 
-				{/* Tags filter */}
-				<div className="flex flex-wrap gap-2">
-					{tags.map((t) => (
-						<a
-							key={t.slug}
-							href={`/novels?tag=${t.slug}`}
-							className={`px-2 py-0.5 rounded text-xs transition-colors ${
-								tag === t.slug
-									? "bg-primary text-primary-foreground"
-									: "bg-muted hover:bg-muted/80"
-							}`}
-						>
-							{t.name}
-						</a>
-					))}
-				</div>
+			{/* Tag filter row */}
+			<div className="flex flex-wrap gap-2 mb-8">
+				{tags.map((t) => (
+					<Link
+						key={t.slug}
+						href={`/novels?tag=${t.slug}`}
+						className={`forge-badge-genre cursor-pointer transition-colors duration-[var(--duration-fast)] forge-focus-ring ${
+							tag === t.slug
+								? "bg-[oklch(from_var(--forge-gold)_l_c_h_/_20%)] border-[var(--forge-gold)]"
+								: ""
+						}`}
+					>
+						{t.name}
+					</Link>
+				))}
+			</div>
 
-				<Suspense fallback={<NovelGridSkeleton />}>
-					<NovelGrid novels={novels} libraryNovelIds={libraryNovelIds} />
-				</Suspense>
+			{/* Separator */}
+			<div className="forge-divider mb-8" aria-hidden="true" />
 
+			{/* Novel grid */}
+			<Suspense fallback={<NovelGridSkeleton />}>
+				<NovelGrid novels={novels} libraryNovelIds={libraryNovelIds} />
+			</Suspense>
+
+			{/* Pagination */}
+			<div className="flex justify-center mt-10">
 				<PaginationNav
 					currentPage={page}
 					totalPages={totalPages}
