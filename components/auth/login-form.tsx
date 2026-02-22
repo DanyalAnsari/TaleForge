@@ -3,10 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "@/lib/auth-client";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { getPostAuthRedirect } from "@/lib/auth-redirect";
@@ -41,45 +37,58 @@ export function LoginForm() {
 	}
 
 	return (
-		<Card>
-			<CardContent className="pt-6">
-				<form onSubmit={handleSubmit} className="space-y-4">
-					<div className="space-y-2">
-						<Label htmlFor="email">Email</Label>
-						<Input
-							id="email"
-							name="email"
-							type="email"
-							placeholder="you@example.com"
-							required
-							disabled={isLoading}
-						/>
-					</div>
+		<form onSubmit={handleSubmit}>
+			{/* Email */}
+			<div className="space-y-1.5 mb-5">
+				<label
+					htmlFor="email"
+					className="font-mono text-xs uppercase tracking-wider text-muted-foreground block"
+				>
+					Email
+				</label>
+				<input
+					id="email"
+					name="email"
+					type="email"
+					placeholder="you@example.com"
+					required
+					disabled={isLoading}
+					className="forge-input w-full px-4 py-2.5 forge-focus-ring"
+				/>
+			</div>
 
-					<div className="space-y-2">
-						<Label htmlFor="password">Password</Label>
-						<Input
-							id="password"
-							name="password"
-							type="password"
-							placeholder="••••••••"
-							required
-							disabled={isLoading}
-						/>
-					</div>
+			{/* Password */}
+			<div className="space-y-1.5 mb-5">
+				<label
+					htmlFor="password"
+					className="font-mono text-xs uppercase tracking-wider text-muted-foreground block"
+				>
+					Password
+				</label>
+				<input
+					id="password"
+					name="password"
+					type="password"
+					placeholder="••••••••"
+					required
+					disabled={isLoading}
+					className="forge-input w-full px-4 py-2.5 forge-focus-ring"
+				/>
+			</div>
 
-					<Button type="submit" className="w-full" disabled={isLoading}>
-						{isLoading ? (
-							<>
-								<Loader2 className="mr-2 h-4 w-4 animate-spin" />
-								Signing in...
-							</>
-						) : (
-							"Sign in"
-						)}
-					</Button>
-				</form>
-			</CardContent>
-		</Card>
+			{/* Submit */}
+			<button
+				type="submit"
+				disabled={isLoading}
+				className="forge-btn-primary w-full py-3 text-sm mt-2 forge-focus-ring inline-flex items-center justify-center transition-colors duration-[var(--duration-fast)] disabled:opacity-50 disabled:pointer-events-none"
+			>
+				{isLoading ?
+					<>
+						<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+						Signing in...
+					</>
+				:	"Sign in"}
+			</button>
+		</form>
 	);
 }
