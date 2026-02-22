@@ -1,16 +1,17 @@
+// components/chapters/chapter-form.tsx
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { createChapter, updateChapter } from "@/lib/actions/chapters";
 import { Loader2 } from "lucide-react";
+import { RichTextEditor } from "@/components/author/rich-text-editor";
 
 interface ChapterFormProps {
 	novelId: string;
@@ -28,32 +29,42 @@ export function ChapterForm({ novelId, chapter }: ChapterFormProps) {
 	const [isPending, startTransition] = useTransition();
 	const [error, setError] = useState<string | null>(null);
 	const [isPublished, setIsPublished] = useState(chapter?.isPublished ?? false);
+	const [content, setContent] = useState(chapter?.content ?? "");
+
+	const handleContentChange = useCallback((html: string) => {
+		setContent(html);
+	}, []);
 
 	async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
 		setError(null);
 
 		const formData = new FormData(e.currentTarget);
-		const data = {
-			title: formData.get("title") as string,
-			content: formData.get("content") as string,
-			isPublished,
-		};
+		const title = formData.get("title") as string;
 
-		if (!data.title.trim()) {
+		if (!title.trim()) {
 			setError("Title is required");
 			return;
 		}
 
-		if (!data.content.trim()) {
+		// Strip HTML tags to check if there's actual text content
+		const textOnly = content.replace(/<[^>]*>/g, "").trim();
+		if (!textOnly) {
 			setError("Content is required");
 			return;
 		}
 
+		const data = {
+			title,
+			content, // This is now HTML from the rich text editor
+			isPublished,
+		};
+
 		startTransition(async () => {
-			const result = chapter
-				? await updateChapter(chapter.id, data)
-				: await createChapter(novelId, data);
+			const result =
+				chapter ?
+					await updateChapter(chapter.id, data)
+				:	await createChapter(novelId, data);
 
 			if (result.error) {
 				setError(result.error);
@@ -91,29 +102,22 @@ export function ChapterForm({ novelId, chapter }: ChapterFormProps) {
 					</div>
 
 					<div className="space-y-2">
-						<Label htmlFor="content">Content *</Label>
-						<Textarea
-							id="content"
-							name="content"
-							defaultValue={chapter?.content}
-							placeholder="Write your chapter content here..."
-							rows={20}
-							className="font-mono"
-							required
+						<Label>Content *</Label>
+						<RichTextEditor
+							content={chapter?.content ?? ""}
+							onChange={handleContentChange}
 							disabled={isPending}
+							placeholder="Begin writing your chapter..."
 						/>
-						<p className="text-xs text-muted-foreground">
-							Separate paragraphs with blank lines for proper formatting
-						</p>
 					</div>
 
 					<div className="flex items-center justify-between rounded-lg border p-4">
 						<div className="space-y-0.5">
 							<Label htmlFor="publish">Publish Chapter</Label>
 							<p className="text-sm text-muted-foreground">
-								{isPublished
-									? "Chapter will be visible to readers"
-									: "Chapter will be saved as draft"}
+								{isPublished ?
+									"Chapter will be visible to readers"
+								:	"Chapter will be saved as draft"}
 							</p>
 						</div>
 						<Switch
@@ -128,16 +132,14 @@ export function ChapterForm({ novelId, chapter }: ChapterFormProps) {
 
 			<div className="flex gap-4">
 				<Button type="submit" disabled={isPending}>
-					{isPending ? (
+					{isPending ?
 						<>
 							<Loader2 className="mr-2 h-4 w-4 animate-spin" />
 							{chapter ? "Saving..." : "Creating..."}
 						</>
-					) : chapter ? (
+					: chapter ?
 						"Save Changes"
-					) : (
-						"Create Chapter"
-					)}
+					:	"Create Chapter"}
 				</Button>
 				<Button
 					type="button"
