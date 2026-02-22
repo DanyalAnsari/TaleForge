@@ -1,21 +1,9 @@
 import { notFound } from "next/navigation";
 import prisma from "@/lib/prisma";
 import { getServerSession } from "@/lib/auth-server";
-import { ChapterNavigation } from "@/components/reader/chapter-navigation";
-import { ReaderSettings } from "@/components/reader/reader-settings";
 import { ReadingProgressTracker } from "@/components/reader/reading-progress-tracker";
 import { CommentsSection } from "@/components/comments/comments-section";
-import {
-	Breadcrumb,
-	BreadcrumbItem,
-	BreadcrumbLink,
-	BreadcrumbList,
-	BreadcrumbPage,
-	BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Separator } from "@/components/ui/separator";
-import { formatDate } from "@/lib/utils";
-import { Eye } from "lucide-react";
+import { ChapterReaderShell } from "@/components/reader/chapter-reader-shell";
 
 interface ChapterPageProps {
 	params: Promise<{ slug: string; number: string }>;
@@ -56,9 +44,9 @@ async function getChapter(novelSlug: string, chapterNumber: number) {
 		chapter,
 		prevChapter: currentIndex > 0 ? chapterNumbers[currentIndex - 1] : null,
 		nextChapter:
-			currentIndex < chapterNumbers.length - 1
-				? chapterNumbers[currentIndex + 1]
-				: null,
+			currentIndex < chapterNumbers.length - 1 ?
+				chapterNumbers[currentIndex + 1]
+			:	null,
 		totalChapters: chapterNumbers.length,
 	};
 }
@@ -99,89 +87,32 @@ export default async function ChapterPage({ params }: ChapterPageProps) {
 		.catch(() => {});
 
 	return (
-		<div className="min-h-screen">
-			{/* Reading Progress Tracker */}
+		<>
+			{/* Server-side progress tracker */}
 			<ReadingProgressTracker
 				novelId={novel.id}
 				chapterId={chapter.id}
 				isLoggedIn={!!session}
 			/>
 
-			{/* Header */}
-			<div className="sticky top-16 z-40 bg-background/95 backdrop-blur border-b">
-				<div className="container py-3 mx-auto">
-					<div className="flex items-center justify-between">
-						<Breadcrumb>
-							<BreadcrumbList>
-								<BreadcrumbItem>
-									<BreadcrumbLink href="/novels">Novels</BreadcrumbLink>
-								</BreadcrumbItem>
-								<BreadcrumbSeparator />
-								<BreadcrumbItem>
-									<BreadcrumbLink
-										href={`/novels/${novel.slug}`}
-										className="max-w-37.5 truncate"
-									>
-										{novel.title}
-									</BreadcrumbLink>
-								</BreadcrumbItem>
-								<BreadcrumbSeparator />
-								<BreadcrumbItem>
-									<BreadcrumbPage>Ch. {chapter.chapterNumber}</BreadcrumbPage>
-								</BreadcrumbItem>
-							</BreadcrumbList>
-						</Breadcrumb>
-						<ReaderSettings />
-					</div>
-				</div>
-			</div>
-
-			{/* Content */}
-			<article className="container max-w-3xl py-8">
-				<header className="text-center mb-8">
-					<p className="text-sm text-muted-foreground mb-2">
-						Chapter {chapter.chapterNumber}
-					</p>
-					<h1 className="text-2xl md:text-3xl font-bold mb-4">
-						{chapter.title}
-					</h1>
-					<div className="flex items-center justify-center gap-4 text-sm text-muted-foreground">
-						<span className="flex items-center gap-1">
-							<Eye className="h-4 w-4" />
-							{chapter.views.toLocaleString()} views
-						</span>
-						<span>{formatDate(chapter.createdAt)}</span>
-					</div>
-				</header>
-
-				<Separator className="my-8" />
-
-				<div id="reader-content" className="reader-content reader-theme-light">
-					{chapter.content.split("\n\n").map((paragraph, index) => (
-						<p key={index}>{paragraph}</p>
-					))}
-				</div>
-
-				<Separator className="my-8" />
-
-				{/* Comments Section */}
-				<div className="mt-12">
-					<CommentsSection chapterId={chapter.id} />
-				</div>
-			</article>
-
-			{/* Bottom navigation (mobile friendly) */}
-			<div className="sticky bottom-0 bg-background/95 backdrop-blur border-t py-4">
-				<div className="w-full container mx-auto">
-					<ChapterNavigation
-						novelSlug={novel.slug}
-						currentChapter={chapter.chapterNumber}
-						totalChapters={totalChapters}
-						prevChapter={prevChapter}
-						nextChapter={nextChapter}
-					/>
-				</div>
-			</div>
-		</div>
+			{/* Client-side reading shell with scroll behaviors */}
+			<ChapterReaderShell
+				novel={{ id: novel.id, title: novel.title, slug: novel.slug }}
+				chapter={{
+					id: chapter.id,
+					title: chapter.title,
+					chapterNumber: chapter.chapterNumber,
+					content: chapter.content,
+					views: chapter.views,
+					createdAt: chapter.createdAt,
+				}}
+				prevChapter={prevChapter}
+				nextChapter={nextChapter}
+				totalChapters={totalChapters}
+			>
+				{/* CommentsSection rendered as a server component, passed as children */}
+				<CommentsSection chapterId={chapter.id} />
+			</ChapterReaderShell>
+		</>
 	);
 }

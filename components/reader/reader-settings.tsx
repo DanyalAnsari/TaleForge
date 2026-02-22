@@ -1,14 +1,12 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Button } from "@/components/ui/button";
 import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
 } from "@/components/ui/popover";
-import { Slider } from "@/components/ui/slider";
-import { Settings, Type, Sun, Moon } from "lucide-react";
+import { Settings, Type, Sun, Moon, Minus, Plus } from "lucide-react";
 
 type Theme = "light" | "dark" | "sepia";
 
@@ -26,13 +24,13 @@ function getStoredValue<T>(key: string, defaultValue: T): T {
 
 export function ReaderSettings() {
 	const [fontSize, setFontSize] = useState<number>(() =>
-		getStoredValue("reader-font-size", 18)
+		getStoredValue("reader-font-size", 18),
 	);
 	const [lineHeight, setLineHeight] = useState<number>(() =>
-		getStoredValue("reader-line-height", 1.8)
+		getStoredValue("reader-line-height", 1.8),
 	);
 	const [theme, setTheme] = useState<Theme>(() =>
-		getStoredValue<Theme>("reader-theme", "light")
+		getStoredValue<Theme>("reader-theme", "light"),
 	);
 	const [mounted, setMounted] = useState(false);
 
@@ -45,7 +43,7 @@ export function ReaderSettings() {
 
 		document.documentElement.style.setProperty(
 			"--reader-font-size",
-			`${fontSize}px`
+			`${fontSize}px`,
 		);
 		localStorage.setItem("reader-font-size", String(fontSize));
 	}, [fontSize, mounted]);
@@ -55,7 +53,7 @@ export function ReaderSettings() {
 
 		document.documentElement.style.setProperty(
 			"--reader-line-height",
-			String(lineHeight)
+			String(lineHeight),
 		);
 		localStorage.setItem("reader-line-height", String(lineHeight));
 	}, [lineHeight, mounted]);
@@ -67,23 +65,29 @@ export function ReaderSettings() {
 
 		const readerContent = document.getElementById("reader-content");
 		if (readerContent) {
-			// Remove all theme classes
 			readerContent.classList.remove(
 				"reader-theme-light",
 				"reader-theme-dark",
-				"reader-theme-sepia"
+				"reader-theme-sepia",
 			);
-			// Add the current theme class
 			readerContent.classList.add(`reader-theme-${theme}`);
 		}
 	}, [theme, mounted]);
 
-	const handleFontSizeChange = useCallback((value: number[]) => {
-		setFontSize(value[0]);
+	const incrementFontSize = useCallback(() => {
+		setFontSize((prev) => Math.min(prev + 1, 24));
 	}, []);
 
-	const handleLineHeightChange = useCallback((value: number[]) => {
-		setLineHeight(value[0]);
+	const decrementFontSize = useCallback(() => {
+		setFontSize((prev) => Math.max(prev - 1, 14));
+	}, []);
+
+	const incrementLineHeight = useCallback(() => {
+		setLineHeight((prev) => Math.min(+(prev + 0.1).toFixed(1), 2.4));
+	}, []);
+
+	const decrementLineHeight = useCallback(() => {
+		setLineHeight((prev) => Math.max(+(prev - 0.1).toFixed(1), 1.4));
 	}, []);
 
 	const handleThemeChange = useCallback((newTheme: Theme) => {
@@ -92,85 +96,120 @@ export function ReaderSettings() {
 
 	if (!mounted) {
 		return (
-			<Button variant="ghost" size="icon">
-				<Settings className="h-5 w-5" />
-			</Button>
+			<button className="forge-btn-ghost forge-focus-ring p-2 transition-colors duration-(--duration-fast)">
+				<Settings className="h-4 w-4" strokeWidth={1.75} />
+			</button>
 		);
 	}
 
 	return (
 		<Popover>
 			<PopoverTrigger asChild>
-				<Button variant="ghost" size="icon">
-					<Settings className="h-5 w-5" />
-				</Button>
+				<button className="forge-btn-ghost forge-focus-ring p-2 transition-colors duration-(--duration-fast)">
+					<Settings className="h-4 w-4" strokeWidth={1.75} />
+				</button>
 			</PopoverTrigger>
-			<PopoverContent className="w-80" align="end">
+			<PopoverContent className="forge-popover p-5 w-80" align="end">
 				<div className="space-y-6">
-					<div className="space-y-2">
-						<div className="flex items-center justify-between">
-							<label className="text-sm font-medium flex items-center gap-2">
-								<Type className="h-4 w-4" />
-								Font Size
-							</label>
-							<span className="text-sm text-muted-foreground">
+					{/* Font Size */}
+					<div>
+						<label className="font-(--font-mono) text-[0.7rem] uppercase tracking-widest text-muted-foreground mb-2 flex items-center gap-2">
+							<Type className="h-3.5 w-3.5" />
+							Font Size
+						</label>
+						<div className="flex items-center justify-between mt-2">
+							<button
+								onClick={decrementFontSize}
+								disabled={fontSize <= 14}
+								className="forge-btn-ghost forge-focus-ring p-1.5 disabled:opacity-30 disabled:pointer-events-none transition-colors duration-[var(--duration-fast)]"
+								aria-label="Decrease font size"
+							>
+								<Minus className="h-3.5 w-3.5" />
+							</button>
+							<span className="font-[var(--font-mono)] text-sm text-foreground tabular-nums">
 								{fontSize}px
 							</span>
+							<button
+								onClick={incrementFontSize}
+								disabled={fontSize >= 24}
+								className="forge-btn-ghost forge-focus-ring p-1.5 disabled:opacity-30 disabled:pointer-events-none transition-colors duration-[var(--duration-fast)]"
+								aria-label="Increase font size"
+							>
+								<Plus className="h-3.5 w-3.5" />
+							</button>
 						</div>
-						<Slider
-							value={[fontSize]}
-							onValueChange={handleFontSizeChange}
-							min={14}
-							max={24}
-							step={1}
-						/>
 					</div>
 
-					<div className="space-y-2">
-						<div className="flex items-center justify-between">
-							<label className="text-sm font-medium">Line Height</label>
-							<span className="text-sm text-muted-foreground">
+					{/* Line Height */}
+					<div>
+						<label className="font-[var(--font-mono)] text-[0.7rem] uppercase tracking-widest text-muted-foreground mb-2 block">
+							Line Height
+						</label>
+						<div className="flex items-center justify-between mt-2">
+							<button
+								onClick={decrementLineHeight}
+								disabled={lineHeight <= 1.4}
+								className="forge-btn-ghost forge-focus-ring p-1.5 disabled:opacity-30 disabled:pointer-events-none transition-colors duration-[var(--duration-fast)]"
+								aria-label="Decrease line height"
+							>
+								<Minus className="h-3.5 w-3.5" />
+							</button>
+							<span className="font-[var(--font-mono)] text-sm text-foreground tabular-nums">
 								{lineHeight.toFixed(1)}
 							</span>
+							<button
+								onClick={incrementLineHeight}
+								disabled={lineHeight >= 2.4}
+								className="forge-btn-ghost forge-focus-ring p-1.5 disabled:opacity-30 disabled:pointer-events-none transition-colors duration-[var(--duration-fast)]"
+								aria-label="Increase line height"
+							>
+								<Plus className="h-3.5 w-3.5" />
+							</button>
 						</div>
-						<Slider
-							value={[lineHeight]}
-							onValueChange={handleLineHeightChange}
-							min={1.4}
-							max={2.4}
-							step={0.1}
-						/>
 					</div>
 
-					<div className="space-y-2">
-						<label className="text-sm font-medium">Theme</label>
-						<div className="flex gap-2">
-							<Button
-								variant={theme === "light" ? "default" : "outline"}
-								size="sm"
+					{/* Theme */}
+					<div>
+						<label className="font-[var(--font-mono)] text-[0.7rem] uppercase tracking-widest text-muted-foreground mb-2 block">
+							Reading Theme
+						</label>
+						<div className="grid grid-cols-2 gap-2 mt-2">
+							<button
 								onClick={() => handleThemeChange("light")}
-								className="flex-1"
+								className={`forge-btn-ghost forge-focus-ring py-2 px-3 text-xs inline-flex items-center justify-center gap-1.5 rounded-[var(--radius-md)] transition-colors duration-[var(--duration-fast)] ${
+									theme === "light" ?
+										"ring-2 ring-[var(--forge-gold)] ring-offset-1 ring-offset-[var(--background)]"
+									:	""
+								}`}
 							>
-								<Sun className="h-4 w-4 mr-1" />
+								<Sun className="h-3.5 w-3.5" />
 								Light
-							</Button>
-							<Button
-								variant={theme === "dark" ? "default" : "outline"}
-								size="sm"
+							</button>
+							<button
 								onClick={() => handleThemeChange("dark")}
-								className="flex-1"
+								className={`forge-btn-ghost forge-focus-ring py-2 px-3 text-xs inline-flex items-center justify-center gap-1.5 rounded-[var(--radius-md)] transition-colors duration-[var(--duration-fast)] ${
+									theme === "dark" ?
+										"ring-2 ring-[var(--forge-gold)] ring-offset-1 ring-offset-[var(--background)]"
+									:	""
+								}`}
 							>
-								<Moon className="h-4 w-4 mr-1" />
+								<Moon className="h-3.5 w-3.5" />
 								Dark
-							</Button>
-							<Button
-								variant={theme === "sepia" ? "default" : "outline"}
-								size="sm"
+							</button>
+							<button
 								onClick={() => handleThemeChange("sepia")}
-								className="flex-1"
+								className={`forge-btn-ghost forge-focus-ring py-2 px-3 text-xs col-span-2 inline-flex items-center justify-center gap-1.5 rounded-[var(--radius-md)] transition-colors duration-[var(--duration-fast)] ${
+									theme === "sepia" ?
+										"ring-2 ring-[var(--forge-gold)] ring-offset-1 ring-offset-[var(--background)]"
+									:	""
+								}`}
 							>
+								<span
+									className="h-3.5 w-3.5 rounded-full bg-[#f4ecd8] border border-[var(--border)] shrink-0"
+									aria-hidden="true"
+								/>
 								Sepia
-							</Button>
+							</button>
 						</div>
 					</div>
 				</div>
@@ -178,3 +217,4 @@ export function ReaderSettings() {
 		</Popover>
 	);
 }
+
