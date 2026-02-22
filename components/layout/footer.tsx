@@ -31,52 +31,65 @@ export function Footer() {
 		],
 	};
 
+	const linkClasses =
+		"text-sm text-muted-foreground hover:text-foreground transition-colors duration-[var(--duration-fast)]";
+
+	const headingClasses =
+		"font-mono text-xs uppercase tracking-widest text-forge-gold mb-3";
+
 	return (
-		<footer className="border-t bg-muted/30 w-full px-8">
-			<div className="container py-12">
-				<div className="grid grid-cols-2 md:grid-cols-5 gap-8">
+		<footer className="border-t border-border bg-forge-parchment-deep dark:bg-forge-navy-mid w-full">
+			<div className="forge-content-container forge-section">
+				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-8">
 					{/* Brand */}
-					<div className="col-span-2 md:col-span-1">
+					<div className="lg:col-span-2">
 						<Link
 							href="/"
-							className="flex items-center gap-2 font-bold text-xl"
+							className="forge-focus-ring flex items-center gap-2 transition-colors duration-(--duration-fast)"
 						>
-							<BookOpen className="h-6 w-6" />
-							<span>TaleForge</span>
+							<BookOpen
+								className="h-5 w-5 text-forge-gold"
+								strokeWidth={1.75}
+							/>
+							<span className="font-(--font-serif) text-xl">
+								TaleForge
+							</span>
 						</Link>
-						<p className="text-sm text-muted-foreground mt-4">
+						<p className="font-(--font-mono) text-xs text-muted-foreground tracking-wide mt-2">
 							Discover stories, share your imagination, and connect with readers
 							worldwide.
 						</p>
-						<div className="flex gap-4 mt-4">
+						<div className="flex gap-2 mt-4">
 							<a
 								href="https://twitter.com"
 								target="_blank"
 								rel="noopener noreferrer"
-								className="text-muted-foreground hover:text-foreground transition-colors"
+								className="forge-btn-ghost forge-focus-ring inline-flex items-center justify-center h-9 w-9 transition-colors duration-(--duration-fast)"
 							>
-								<Twitter className="h-5 w-5" />
+								<Twitter className="h-4 w-4" />
+								<span className="sr-only">Twitter</span>
 							</a>
 							<a
 								href="https://github.com"
 								target="_blank"
 								rel="noopener noreferrer"
-								className="text-muted-foreground hover:text-foreground transition-colors"
+								className="forge-btn-ghost forge-focus-ring inline-flex items-center justify-center h-9 w-9 transition-colors duration-(--duration-fast)"
 							>
-								<Github className="h-5 w-5" />
+								<Github className="h-4 w-4" />
+								<span className="sr-only">GitHub</span>
 							</a>
 						</div>
 					</div>
 
 					{/* Browse Links */}
 					<div>
-						<h3 className="font-semibold mb-3">Browse</h3>
+						<h3 className={headingClasses}>Browse</h3>
 						<ul className="space-y-2">
 							{links.browse.map((link) => (
 								<li key={link.href}>
 									<Link
 										href={link.href}
-										className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+										className={`${linkClasses} forge-focus-ring`}
 									>
 										{link.label}
 									</Link>
@@ -87,13 +100,13 @@ export function Footer() {
 
 					{/* Account Links */}
 					<div>
-						<h3 className="font-semibold mb-3">Account</h3>
+						<h3 className={headingClasses}>Account</h3>
 						<ul className="space-y-2">
 							{links.account.map((link) => (
 								<li key={link.href}>
 									<Link
 										href={link.href}
-										className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+										className={`${linkClasses} forge-focus-ring`}
 									>
 										{link.label}
 									</Link>
@@ -104,13 +117,13 @@ export function Footer() {
 
 					{/* Authors Links */}
 					<div>
-						<h3 className="font-semibold mb-3">Authors</h3>
+						<h3 className={headingClasses}>Authors</h3>
 						<ul className="space-y-2">
 							{links.authors.map((link, idx) => (
 								<li key={idx}>
 									<Link
 										href={link.href}
-										className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+										className={`${linkClasses} forge-focus-ring`}
 									>
 										{link.label}
 									</Link>
@@ -121,13 +134,13 @@ export function Footer() {
 
 					{/* Legal Links */}
 					<div>
-						<h3 className="font-semibold mb-3">Legal</h3>
+						<h3 className={headingClasses}>Legal</h3>
 						<ul className="space-y-2">
 							{links.legal.map((link) => (
 								<li key={link.href}>
 									<Link
 										href={link.href}
-										className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+										className={`${linkClasses} forge-focus-ring`}
 									>
 										{link.label}
 									</Link>
@@ -138,12 +151,12 @@ export function Footer() {
 				</div>
 
 				{/* Bottom Bar */}
-				<div className="border-t mt-8 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-					<p className="text-sm text-muted-foreground">
+				<div className="border-t border-border mt-8 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+					<p className="font-(--font-mono) text-xs text-muted-foreground">
 						© {currentYear} TaleForge. All rights reserved.
 					</p>
-					<p className="text-sm text-muted-foreground">
-						Made with ❤️ for readers and writers
+					<p className="font-(--font-mono) text-xs text-muted-foreground">
+						Made with ♥ for readers and writers
 					</p>
 				</div>
 			</div>
