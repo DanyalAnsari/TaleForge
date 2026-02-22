@@ -8,7 +8,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, Loader2 } from "lucide-react";
 
-export function SearchForm() {
+interface SearchFormProps {
+	inputClassName?: string;
+}
+
+export function SearchForm({ inputClassName }: SearchFormProps) {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const [isPending, startTransition] = useTransition();
@@ -32,11 +36,13 @@ export function SearchForm() {
 					placeholder="Search novels by title, description, or author..."
 					value={query}
 					onChange={(e) => setQuery(e.target.value)}
-					className="pl-10"
+					className={inputClassName ?? "forge-input pl-10"}
 				/>
 			</div>
 			<Button type="submit" disabled={isPending}>
-				{isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : "Search"}
+				{isPending ?
+					<Loader2 className="h-4 w-4 animate-spin" />
+				:	"Search"}
 			</Button>
 		</form>
 	);
